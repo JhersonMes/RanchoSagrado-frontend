@@ -1,0 +1,26 @@
+<h2>Lista de Proveedores</h2>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Empresa</th>
+    <th>RUC</th>
+    <th>Email de Contacto</th>
+    <th>Teléfono</th>
+    <th>Tipo de Suministro</th>
+    <th>Estado</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let s of suppliers">
+    <td>{{ s.idSupplier }}</td>
+    <td>{{ s.companyName }}</td>
+    <td>{{ s.ruc }}</td>
+    <td>{{ s.contactEmail }}</td>
+    <td>{{ s.phone }}</td>
+    <td>{{ s.supplyType }}</td>
+    <td>{{ s.status }}</td>
+  </tr>
+  </tbody>
+</table>
