@@ -1,0 +1,84 @@
+<div class="example-container">
+    <mat-toolbar class="example-toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            @if (!sidenav.opened) {
+            <mat-icon>menu</mat-icon>
+            }@else {
+            <mat-icon>close</mat-icon>
+            }
+        </button>
+
+        <span>Rancho Sagrado</span>
+
+        <span class="example-spacer"></span>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>account_box</mat-icon>
+                <span>Mi cuenta</span>
+            </button>
+            <button mat-menu-item (click)="sidenav.opened = false">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Cerrar sesión</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #sidenav style="width: 250px" mode="push">
+
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/dashboard">
+                <mat-icon>search</mat-icon>
+                <span>Search</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/rent">
+                <mat-icon>view_carousel</mat-icon>
+                <span>Register Rental</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/client">
+                <mat-icon>people</mat-icon>
+                <span>Client</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/owner">
+                <mat-icon>healing</mat-icon>
+                <span>Owner</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/tag">
+                <mat-icon>assignment</mat-icon>
+                <span>Tag</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/company">
+                <mat-icon>accessibility</mat-icon>
+                <span>Company</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
+                routerLink="/pages/report">
+                <mat-icon>assessment</mat-icon>
+                <span>Report</span>
+            </button>
+            <mat-divider></mat-divider>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>

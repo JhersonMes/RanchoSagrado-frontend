@@ -1,2 +1,1 @@
-Frontend de RanchoSagrado
-prueba co,,
+Frontend de RanchoSagrado 
