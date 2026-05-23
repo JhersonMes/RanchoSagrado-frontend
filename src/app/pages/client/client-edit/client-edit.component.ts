@@ -65,7 +65,7 @@ export class ClientEditComponent {
 
     operation$.pipe(
       switchMap(() => this.clientService.findAll()),
-      tap(data => this.clientService.setClientChange(data)),
+      tap(data => this.clientService.setListChange(data)),
       tap(() => this.clientService.setMessageChange(isEdit ? 'UPDATED' : 'CREATED'))
     )
       .subscribe(() => {

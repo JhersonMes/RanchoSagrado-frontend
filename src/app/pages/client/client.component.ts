@@ -13,6 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 
+
 @Component({
   selector: 'app-client',
   imports: [
@@ -40,15 +41,15 @@ export class ClientComponent {
   protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
 
-  protected clients = this.clientService.$clientsChange;
+  protected $clients = this.clientService.$listChange;
 
   protected displayedColumns: string[] = ['idClient', 'dni', 'name', 'lastName', 'phone', 'email', 'birthDate', 'address', 'ruc', 'actions'];
 
   constructor() {
-    this.clientService.findAll().subscribe(data => this.clientService.setClientChange(data));
+    this.clientService.findAll().subscribe(data => this.clientService.setListChange(data));
 
     effect(() => {
-      const data = this.clients();
+      const data = this.$clients();
       const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
@@ -78,7 +79,7 @@ export class ClientComponent {
       this.clientService.delete(idClient)
         .pipe(
           switchMap(() => this.clientService.findAll()),
-          tap(data => this.clientService.setClientChange(data)),
+          tap(data => this.clientService.setListChange(data)),
           tap(() => this.clientService.setMessageChange('DELETED'))
         )
         .subscribe();
