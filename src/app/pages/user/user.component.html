@@ -1,0 +1,83 @@
+<router-outlet></router-outlet>
+
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. admin" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="idUser">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idUser}} </td>
+    </ng-container>
+
+    <!-- Username Column -->
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> USERNAME </th>
+      <td mat-cell *matCellDef="let row"> {{row.username}} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> EMAIL </th>
+      <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+    </ng-container>
+
+    <!-- Employee Column (nombre completo del empleado vinculado) -->
+    <ng-container matColumnDef="employee">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> EMPLOYEE </th>
+      <td mat-cell *matCellDef="let row">
+        {{row.employee?.name}} {{row.employee?.lastName}}
+      </td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ROLE </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-chip>{{row.role?.name}}</mat-chip>
+      </td>
+    </ng-container>
+
+    <!-- Enabled Column -->
+    <ng-container matColumnDef="enabled">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon [class]="row.enabled ? 'status-active' : 'status-inactive'">
+          {{row.enabled ? 'check_circle' : 'cancel'}}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button [routerLink]="['edit', row.idUser]">
+          <span>Edit</span>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-flat-button class="cancel-button" (click)="delete(row.idUser)">
+          <span>Delete</span>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="7">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+  <button mat-fab style="float: right;" routerLink="/pages/user/new">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

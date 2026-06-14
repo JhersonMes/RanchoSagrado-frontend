@@ -1,0 +1,13 @@
+.cancel-button {
+  margin-left: 8px;
+  background-color: #f44336;
+  color: white;
+}
+
+.status-active {
+  color: #4caf50;
+}
+
+.status-inactive {
+  color: #f44336;
+}
