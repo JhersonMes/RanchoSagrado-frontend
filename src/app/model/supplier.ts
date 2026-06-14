@@ -1,10 +1,10 @@
-export class Supplier {
-    idSupplier: number;
-    phone: string;
-    ruc: string;
-    companyName: string;
-    contactEmail: string;
-    address: string;
-    supplyType: string;
-    status: string;
+export interface Supplier {
+  idSupplier?: number;
+  companyName: string;
+  ruc: string;
+  contactEmail: string;
+  phone: string;
+  address: string;
+  supplyType: string;
+  status: string;
 }
