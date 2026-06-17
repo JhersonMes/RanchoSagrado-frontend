@@ -1,15 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { LayoutComponent } from './pages/layout/layout.component';
-import { RegisterComponent } from './login/register/register.component';
+import { ClientComponent } from './pages/client/client.component';
+import { ClientEditComponent } from './pages/client/client-edit/client-edit.component';
+import { SupplierComponent } from './pages/supplier/supplier.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  {
-    path: 'pages',
-    component: LayoutComponent,
-    loadChildren: () => import('./pages/pages.routes').then((m) => m.pagesRoutes),
-  },
+  { path: 'pages/client', component: ClientComponent },
+  { path: 'pages/client/new', component: ClientEditComponent },
+  { path: 'pages/client/edit/:id', component: ClientEditComponent },
+  { path: 'pages/supplier', component: SupplierComponent },
+  { path: '', redirectTo: 'pages/client', pathMatch: 'full' }
 ];
