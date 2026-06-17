@@ -1,0 +1,51 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idReservation"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Client</mat-label>
+        <mat-select formControlName="client" [compareWith]="compareFnClient">
+            @for (c of clientService.$listChange(); track c.idClient) {
+                <mat-option [value]="c">{{c.name}} {{c.lastName}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Table</mat-label>
+        <mat-select formControlName="restaurantTable" [compareWith]="compareFnTable">
+            @for (t of tableService.$listChange(); track t.idTable) {
+                <mat-option [value]="t">Table #{{t.tableNumber}} ({{t.capacity}} persons)</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Reservation Date</mat-label>
+        <input matInput type="datetime-local" formControlName="reservationDate">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Number of People</mat-label>
+        <input matInput type="number" placeholder="2" formControlName="numberOfPeople">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Special Occasion</mat-label>
+        <input matInput placeholder="Birthday, Anniversary..." formControlName="specialOccasion">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="PENDIENTE / CONFIRMADA / CANCELADA" formControlName="status">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Notes</mat-label>
+        <input matInput placeholder="Notes..." formControlName="notes">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/reservation">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

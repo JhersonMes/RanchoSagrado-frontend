@@ -1,0 +1,28 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idShift"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Shift name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Start Time (HH:mm:ss)</mat-label>
+        <input matInput placeholder="08:00:00" formControlName="startTime">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>End Time (HH:mm:ss)</mat-label>
+        <input matInput placeholder="16:00:00" formControlName="endTime">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Days of Week</mat-label>
+        <input matInput placeholder="LUNES,MARTES..." formControlName="daysOfWeek">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/shift">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

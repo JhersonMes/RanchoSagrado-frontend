@@ -1,0 +1,37 @@
+<router-outlet></router-outlet>
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Bebidas" #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+    <ng-container matColumnDef="idProductCategory">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idProductCategory}} </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NAME </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> DESCRIPTION </th>
+      <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+    </ng-container>
+    <ng-container matColumnDef="menu">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> MENU </th>
+      <td mat-cell *matCellDef="let row"> {{row.menu?.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button [routerLink]="['edit', row.idProductCategory]"><span>Edit</span><mat-icon>edit</mat-icon></button>
+        <button mat-flat-button class="cancel-button" (click)="delete(row.idProductCategory)"><span>Delete</span><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow><td class="mat-cell" colspan="5">No data matching "{{input.value}}"</td></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5,10,25]"></mat-paginator>
+  <button mat-fab style="float: right;" routerLink="/pages/product-category/new"><mat-icon>add</mat-icon></button>
+</div>

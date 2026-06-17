@@ -1,0 +1,108 @@
+<div class="login-page">
+
+  <div class="login-bg-overlay"></div>
+
+  <mat-card class="login-card" appearance="outlined">
+
+    <div class="card-header">
+      <div class="logo-circle">
+        <mat-icon>storefront</mat-icon>
+      </div>
+      <h1 class="brand-title">El Rancho Sagrado</h1>
+      <p class="brand-subtitle">RANCHOONLINE &mdash; SISTEMA DE GESTIÓN</p>
+    </div>
+
+    <mat-card-content>
+
+      <div class="welcome-text">
+        <h2>Bienvenido de vuelta</h2>
+        <p>Ingresa tus credenciales para acceder al sistema</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario o Correo electrónico</mat-label>
+          <mat-icon matPrefix>person_outline</mat-icon>
+          <input
+            matInput
+            type="text"
+            formControlName="username"
+            placeholder="Introduce tu usuario o correo"
+          />
+          @if (loginForm.get('username')?.touched && loginForm.get('username')?.hasError('required')) {
+            <mat-error>El usuario o correo es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <input
+            matInput
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePassword()"
+            aria-label="Toggle password visibility"
+          >
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')) {
+            <mat-error>La contraseña es obligatoria</mat-error>
+          }
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('minlength')) {
+            <mat-error>Mínimo 3 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-footer-row">
+          <a routerLink="/forgot" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        @if (loginError()) {
+          <div class="error-banner" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ loginError() }}</span>
+          </div>
+        }
+
+        <button
+        mat-flat-button
+        class="btn-submit"
+        type="submit"
+        [disabled]="!isFormValid() || isLoggingIn()"
+        >
+        @if (isLoggingIn()) {
+            <ng-container>
+            <mat-spinner diameter="20" color="accent"></mat-spinner>
+            <span>Ingresando...</span>
+            </ng-container>
+        } @else {
+            <ng-container>
+            <mat-icon>login</mat-icon>
+            <span>Iniciar sesión</span>
+            </ng-container>
+        }
+        </button>
+
+        <div class="form-footer-row" style="justify-content: center; margin-top: 1rem;">
+          <a routerLink="/register" class="forgot-link">¿No tienes cuenta? Regístrate</a>
+        </div>
+
+      </form>
+
+    </mat-card-content>
+
+    <div class="card-footer">
+      <span>El Rancho Sagrado &middot; Cajamarca, Perú</span>
+    </div>
+
+  </mat-card>
+
+</div>

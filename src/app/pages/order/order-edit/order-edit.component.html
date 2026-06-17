@@ -1,0 +1,62 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idOrder"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Employee</mat-label>
+        <mat-select formControlName="employee" [compareWith]="compareFnEmployee">
+            @for (e of employeeService.$listChange(); track e.idEmployee) {
+                <mat-option [value]="e">{{e.name}} {{e.lastName}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Client (optional)</mat-label>
+        <mat-select formControlName="client" [compareWith]="compareFnClient">
+            <mat-option [value]="null">-- None --</mat-option>
+            @for (c of clientService.$listChange(); track c.idClient) {
+                <mat-option [value]="c">{{c.name}} {{c.lastName}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Table (optional)</mat-label>
+        <mat-select formControlName="restaurantTable" [compareWith]="compareFnTable">
+            <mat-option [value]="null">-- None --</mat-option>
+            @for (t of tableService.$listChange(); track t.idTable) {
+                <mat-option [value]="t">Table #{{t.tableNumber}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Order Date</mat-label>
+        <input matInput type="datetime-local" formControlName="orderDate">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="PENDIENTE / EN_PROCESO / LISTO..." formControlName="status">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Sub Total</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="subTotal">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Total</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="total">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Detail</mat-label>
+        <input matInput placeholder="Notes..." formControlName="detail">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/order">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

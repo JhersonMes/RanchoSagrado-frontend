@@ -1,0 +1,39 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idIngredient"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Ingredient name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Unit of Measure</mat-label>
+        <input matInput placeholder="kg, lt, g..." formControlName="unitOfMeasure">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Unit Cost</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="unitCost">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="ingredientCategory" [compareWith]="compareFn">
+            @for (cat of categoryService.$listChange(); track cat.idCategory) {
+                <mat-option [value]="cat">{{cat.name}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="status">Active</mat-checkbox>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/ingredient">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

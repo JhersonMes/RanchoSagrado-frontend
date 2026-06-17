@@ -1,0 +1,13 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idCategory"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Category Name</mat-label>
+        <input matInput placeholder="Category Name" formControlName="name">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/ingredient-category">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

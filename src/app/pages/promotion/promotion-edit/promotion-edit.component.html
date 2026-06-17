@@ -1,0 +1,35 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idPromotion"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Promotion name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Discount (%)</mat-label>
+        <input matInput type="number" placeholder="10" formControlName="discountPercentage">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Start Date</mat-label>
+        <input matInput type="date" formControlName="startDate">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>End Date</mat-label>
+        <input matInput type="date" formControlName="endDate">
+    </mat-form-field>
+
+    <mat-checkbox formControlName="status">Active</mat-checkbox>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/promotion">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

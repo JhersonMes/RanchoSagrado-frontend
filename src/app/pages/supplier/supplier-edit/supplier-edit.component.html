@@ -1,0 +1,55 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+
+    <div [hidden]="true">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="idSupplier">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field>
+        <mat-label>Company Name</mat-label>
+        <input matInput placeholder="Company Name" formControlName="companyName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>RUC</mat-label>
+        <input matInput placeholder="RUC" formControlName="ruc">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Contact Email</mat-label>
+        <input matInput placeholder="email@example.com" formControlName="contactEmail" type="email">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Phone</mat-label>
+        <input matInput placeholder="Phone" formControlName="phone">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Address" formControlName="address">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Supply Type</mat-label>
+        <input matInput placeholder="Supply Type" formControlName="supplyType">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="Status" formControlName="status">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit">
+        <span>OK</span>
+        <mat-icon>done</mat-icon>
+    </button>
+
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/supplier">
+        <span>Cancel</span>
+        <mat-icon>cancel</mat-icon>
+    </button>
+
+</form>

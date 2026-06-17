@@ -1,0 +1,27 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idProductCategory"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Category name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Menu</mat-label>
+        <mat-select formControlName="menu" [compareWith]="compareFn">
+            @for (m of menuService.$listChange(); track m.idMenu) {
+                <mat-option [value]="m">{{m.name}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/product-category">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

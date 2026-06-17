@@ -1,0 +1,28 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idTable"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Table Number</mat-label>
+        <input matInput type="number" placeholder="1" formControlName="tableNumber">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" placeholder="4" formControlName="capacity">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Location</mat-label>
+        <input matInput placeholder="VIP, Terraza..." formControlName="location">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="DISPONIBLE / OCUPADA..." formControlName="status">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/restaurant-table">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

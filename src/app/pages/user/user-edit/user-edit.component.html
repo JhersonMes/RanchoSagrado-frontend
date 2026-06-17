@@ -1,0 +1,39 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+
+    <div [hidden]="true">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="idUser">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" [placeholder]="$isEdit() ? 'Dejar vacío para no cambiar' : ''">
+    </mat-form-field>
+
+    <div class="checkbox-container">
+        <mat-checkbox formControlName="enabled">User Enabled</mat-checkbox>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="$form().invalid">
+        <span>{{ $isEdit() ? 'Update' : 'Create' }}</span>
+        <mat-icon>done</mat-icon>
+    </button>
+
+    <button mat-flat-button type="button" routerLink="/pages/user">
+        <span>Cancel</span>
+        <mat-icon>cancel</mat-icon>
+    </button>
+
+</form>

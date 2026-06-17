@@ -1,0 +1,45 @@
+<router-outlet></router-outlet>
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. PENDIENTE" #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+    <ng-container matColumnDef="idReservation">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idReservation}} </td>
+    </ng-container>
+    <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> CLIENT </th>
+      <td mat-cell *matCellDef="let row"> {{row.client?.name}} {{row.client?.lastName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="reservationDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> DATE </th>
+      <td mat-cell *matCellDef="let row"> {{row.reservationDate | date:'short'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="numberOfPeople">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> PEOPLE </th>
+      <td mat-cell *matCellDef="let row"> {{row.numberOfPeople}} </td>
+    </ng-container>
+    <ng-container matColumnDef="restaurantTable">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> TABLE </th>
+      <td mat-cell *matCellDef="let row"> #{{row.restaurantTable?.tableNumber}} </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+      <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button [routerLink]="['edit', row.idReservation]"><span>Edit</span><mat-icon>edit</mat-icon></button>
+        <button mat-flat-button class="cancel-button" (click)="delete(row.idReservation)"><span>Delete</span><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow><td class="mat-cell" colspan="7">No data matching "{{input.value}}"</td></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5,10,25]"></mat-paginator>
+  <button mat-fab style="float: right;" routerLink="/pages/reservation/new"><mat-icon>add</mat-icon></button>
+</div>
