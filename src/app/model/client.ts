@@ -1,4 +1,4 @@
-export class Client {
+export interface Client {
     idClient: number;
     dni: number;
     name: string;

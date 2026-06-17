@@ -1,26 +1,73 @@
-<h2>Lista de Proveedores</h2>
+<router-outlet></router-outlet>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Empresa</th>
-    <th>RUC</th>
-    <th>Email de Contacto</th>
-    <th>Teléfono</th>
-    <th>Tipo de Suministro</th>
-    <th>Estado</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let s of suppliers">
-    <td>{{ s.idSupplier }}</td>
-    <td>{{ s.companyName }}</td>
-    <td>{{ s.ruc }}</td>
-    <td>{{ s.contactEmail }}</td>
-    <td>{{ s.phone }}</td>
-    <td>{{ s.supplyType }}</td>
-    <td>{{ s.status }}</td>
-  </tr>
-  </tbody>
-</table>
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Empresa" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+
+    <ng-container matColumnDef="idSupplier">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idSupplier}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="companyName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> COMPANY </th>
+      <td mat-cell *matCellDef="let row"> {{row.companyName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ruc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> RUC </th>
+      <td mat-cell *matCellDef="let row"> {{row.ruc}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="contactEmail">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> EMAIL </th>
+      <td mat-cell *matCellDef="let row"> {{row.contactEmail}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> PHONE </th>
+      <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="supplyType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SUPPLY TYPE </th>
+      <td mat-cell *matCellDef="let row"> {{row.supplyType}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+      <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button [routerLink]="['edit', row.idSupplier]">
+          <span>Edit</span>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-flat-button class="cancel-button" (click)="delete(row.idSupplier)">
+          <span>Delete</span>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of suppliers"></mat-paginator>
+
+  <button mat-fab style="float: right;" routerLink="/pages/supplier/new">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
