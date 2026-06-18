@@ -1,37 +1,34 @@
 import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
-import { Employee } from '../../model/employee';
-import { EmployeeService } from '../../services/employee.service';
+import { PaymentReceipt } from '../../model/paymentreceipt';
+import { PaymentReceiptService } from '../../services/paymentreceipt.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-employee',
+  selector: 'app-payment-receipt',
   imports: [
-    MatTableModule, MatFormFieldModule, MatInputModule,
-    MatPaginatorModule, MatSortModule, MatButtonModule,
-    MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule,
+    MatTableModule, MatPaginatorModule, MatSortModule,
+    MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule, DatePipe, DecimalPipe,
   ],
-  templateUrl: './employee.component.html',
-  styleUrl: './employee.component.css',
+  templateUrl: './payment-receipt.component.html',
+  styleUrl: './payment-receipt.component.css',
 })
-export class EmployeeComponent {
+export class PaymentReceiptComponent {
 
-  private readonly service = inject(EmployeeService);
+  private readonly service = inject(PaymentReceiptService);
   private readonly snackBar = inject(MatSnackBar);
 
-  protected $dataSource = signal(new MatTableDataSource<Employee>());
+  protected $dataSource = signal(new MatTableDataSource<PaymentReceipt>());
   protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
   protected $items = this.service.$listChange;
-  protected displayedColumns = ['idEmployee', 'name', 'lastName', 'address', 'job', 'phone', 'status', 'dni', 'actions'];
+  protected displayedColumns = ['idReceipt', 'order', 'receiptType', 'series', 'receiptNumber', 'emissionDate', 'totalAmount', 'paymentMethod', 'status', 'actions'];
 
   constructor() {
     this.service.findAll().subscribe(data => this.service.setListChange(data));
@@ -57,7 +54,7 @@ export class EmployeeComponent {
   }
 
   delete(id: number) {
-    if (window.confirm('¿Eliminar este empleado?')) {
+    if (window.confirm('¿Eliminar este comprobante?')) {
       this.service.delete(id).pipe(
         switchMap(() => this.service.findAll()),
         tap(data => this.service.setListChange(data)),

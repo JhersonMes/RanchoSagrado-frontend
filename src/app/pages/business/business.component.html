@@ -1,0 +1,13 @@
+<div class="page">
+  <div class="dashboard-grid">
+    @for (card of cards; track card.title) {
+      <a class="dashboard-card" [routerLink]="card.link">
+        <span class="dashboard-card-icon"><mat-icon>{{ card.icon }}</mat-icon></span>
+        <span>
+          <p class="dashboard-card-title">{{ card.title }}</p>
+          <p class="dashboard-card-subtitle">{{ card.subtitle }}</p>
+        </span>
+      </a>
+    }
+  </div>
+</div>

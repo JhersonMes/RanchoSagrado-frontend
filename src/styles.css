@@ -1,5 +1,396 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Rancho Sagrado — Design system global
+   Variables, tipografia moderna y clases reutilizables para las paginas
+   de administracion (dashboard de negocio + listados CRUD).
+   ========================================================================== */
+
+:root {
+  --brand-50: #fdf8f3;
+  --brand-100: #fbe7d4;
+  --brand-200: #f6d3ad;
+  --brand-600: #c2762a;
+  --brand-700: #a85f1f;
+  --brand-900: #2d1a0a;
+
+  --color-bg: #f5f1ec;
+  --color-surface: #ffffff;
+  --color-border: #ecdcc8;
+  --color-text: #2d1a0a;
+  --color-text-soft: #8a6a4a;
+  --color-text-muted: #a89a8c;
+
+  --color-edit: #2563eb;
+  --color-edit-bg: #e8f0fe;
+  --color-delete: #c0392b;
+  --color-delete-bg: #fdecea;
+
+  --color-success: #2e7d32;
+  --color-success-bg: #e3f3e2;
+  --color-danger: #c0392b;
+  --color-danger-bg: #fdecea;
+  --color-neutral: #6b7280;
+  --color-neutral-bg: #eef0f2;
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-sm: 0 1px 2px rgba(45, 26, 10, 0.05), 0 1px 3px rgba(45, 26, 10, 0.06);
+  --shadow-md: 0 8px 24px rgba(45, 26, 10, 0.08);
+}
+
+html,
+body {
+  font-family: 'Poppins', 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+}
+
 .cancel-button {
-  background-color: blueviolet !important;
-  color: white !important;
+  background-color: var(--color-neutral-bg, #eef0f2);
+  color: var(--color-text-soft, #8a6a4a);
+}
+
+/* ==========================================================================
+   Pagina de listado (back link + encabezado + buscador + tabla)
+   ========================================================================== */
+
+.page {
+  padding: 28px 32px 48px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-soft);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.page-back mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.page-back:hover {
+  color: var(--brand-600);
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.page-title {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--brand-700);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 20px;
+  height: 44px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-900);
+}
+
+.btn-primary mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 16px;
+  height: 48px;
+  max-width: 480px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.search-box mat-icon {
+  color: var(--color-text-muted);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.search-box input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.table-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.table-card .table-scroll {
+  overflow-x: auto;
+}
+
+/* ==========================================================================
+   Tablas Angular Material — sobreescritura para look plano y moderno
+   ========================================================================== */
+
+.table-card table[mat-table] {
+  width: 100%;
+  background: transparent;
+}
+
+.table-card th[mat-header-cell] {
+  background-color: var(--brand-50);
+  color: var(--color-text-soft);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.table-card td[mat-cell] {
+  color: var(--color-text);
+  font-size: 14px;
+  border-bottom: 1px solid #f3ece2;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.table-card tr[mat-row]:hover {
+  background-color: var(--brand-50);
+}
+
+.table-card tr[mat-row]:last-child td[mat-cell] {
+  border-bottom: none;
+}
+
+.table-card .mat-mdc-paginator {
+  background-color: transparent;
+  color: var(--color-text-soft);
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  margin-right: 4px;
+}
+
+.action-link mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+.action-link.edit {
+  color: var(--color-edit);
+}
+
+.action-link.edit:hover {
+  background-color: var(--color-edit-bg);
+}
+
+.action-link.delete {
+  color: var(--color-delete);
+}
+
+.action-link.delete:hover {
+  background-color: var(--color-delete-bg);
+}
+
+/* Badges de estado */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-success {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+}
+
+.badge-danger {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+.badge-neutral {
+  color: var(--color-neutral);
+  background-color: var(--color-neutral-bg);
+}
+
+/* ==========================================================================
+   Dashboard "Administrar Negocio"
+   ========================================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-decoration: none;
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-card-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--brand-100);
+  color: var(--brand-700);
+}
+
+.dashboard-card-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.dashboard-card-title {
+  margin: 0 0 2px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.dashboard-card-subtitle {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--color-text-soft);
+}
+
+/* ==========================================================================
+   Formularios (paginas *-edit) — la mayoria comparte la clase
+   ".example-container" generada por el patron CRUD del proyecto.
+   ========================================================================== */
+
+.example-container {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+  max-width: 560px;
+  margin: 28px auto;
+  gap: 4px;
+}
+
+.example-container button[mat-flat-button] {
+  border-radius: var(--radius-sm) !important;
+  height: 44px;
+  font-weight: 600 !important;
+  margin-top: 8px;
+}
+
+.example-container button[mat-flat-button][type='submit'] {
+  background-color: var(--brand-700) !important;
+  color: #fff !important;
+}
+
+.example-container button[mat-flat-button][type='submit']:hover {
+  background-color: var(--brand-900) !important;
+}
+
+.example-container button[mat-flat-button].cancel-button {
+  background-color: var(--color-neutral-bg) !important;
+  color: var(--color-text-soft) !important;
 }

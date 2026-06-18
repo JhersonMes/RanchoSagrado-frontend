@@ -1,45 +1,67 @@
 <router-outlet></router-outlet>
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. SERVICIO" #input>
-</mat-form-field>
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="$dataSource()" matSort>
-    <ng-container matColumnDef="idContract">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-      <td mat-cell *matCellDef="let row"> {{row.idContract}} </td>
-    </ng-container>
-    <ng-container matColumnDef="employee">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> EMPLOYEE </th>
-      <td mat-cell *matCellDef="let row"> {{row.employee?.name}} {{row.employee?.lastName}} </td>
-    </ng-container>
-    <ng-container matColumnDef="contractType">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> TYPE </th>
-      <td mat-cell *matCellDef="let row"> {{row.contractType}} </td>
-    </ng-container>
-    <ng-container matColumnDef="salary">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> SALARY </th>
-      <td mat-cell *matCellDef="let row"> S/ {{row.salary | number:'1.2-2'}} </td>
-    </ng-container>
-    <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> START </th>
-      <td mat-cell *matCellDef="let row"> {{row.startDate | date:'shortDate'}} </td>
-    </ng-container>
-    <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> END </th>
-      <td mat-cell *matCellDef="let row"> {{row.endDate | date:'shortDate'}} </td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-flat-button [routerLink]="['edit', row.idContract]"><span>Edit</span><mat-icon>edit</mat-icon></button>
-        <button mat-flat-button class="cancel-button" (click)="delete(row.idContract)"><span>Delete</span><mat-icon>delete</mat-icon></button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr class="mat-row" *matNoDataRow><td class="mat-cell" colspan="7">No data matching "{{input.value}}"</td></tr>
-  </table>
-  <mat-paginator [pageSizeOptions]="[5,10,25]"></mat-paginator>
-  <button mat-fab style="float: right;" routerLink="/pages/contract/new"><mat-icon>add</mat-icon></button>
+
+<div class="page">
+  <a class="page-back" routerLink="/pages/business">
+    <mat-icon>arrow_back</mat-icon>
+    Volver a la Gestión de Negocio
+  </a>
+
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Lista de Contratos</h1>
+      <p class="page-subtitle">Administra los contratos registrados.</p>
+    </div>
+    <button class="btn-primary" routerLink="/pages/contract/new">
+      <mat-icon>add</mat-icon>
+      Nuevo Contrato
+    </button>
+  </div>
+
+  <div class="search-box">
+    <mat-icon>search</mat-icon>
+    <input (keyup)="applyFilter($event)" placeholder="Buscar por empleado, tipo..." #input>
+  </div>
+
+  <div class="table-card">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="$dataSource()" matSort>
+        <ng-container matColumnDef="idContract">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+          <td mat-cell *matCellDef="let row"> {{row.idContract}} </td>
+        </ng-container>
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> EMPLEADO </th>
+          <td mat-cell *matCellDef="let row"> {{row.employee?.name}} {{row.employee?.lastName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contractType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TIPO </th>
+          <td mat-cell *matCellDef="let row"> {{row.contractType}} </td>
+        </ng-container>
+        <ng-container matColumnDef="salary">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> SALARIO </th>
+          <td mat-cell *matCellDef="let row"> S/ {{row.salary | number:'1.2-2'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="startDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> INICIO </th>
+          <td mat-cell *matCellDef="let row"> {{row.startDate | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="endDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> FIN </th>
+          <td mat-cell *matCellDef="let row"> {{row.endDate | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
+          <td mat-cell *matCellDef="let row">
+            <a class="action-link edit" [routerLink]="['edit', row.idContract]"><mat-icon>edit</mat-icon>Editar</a>
+            <a class="action-link delete" (click)="delete(row.idContract)"><mat-icon>delete</mat-icon>Eliminar</a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow><td class="mat-cell" colspan="7">No hay resultados para "{{input.value}}"</td></tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5,10,25]"></mat-paginator>
+  </div>
 </div>

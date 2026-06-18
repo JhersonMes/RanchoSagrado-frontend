@@ -1,0 +1,77 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <div [hidden]="true"><mat-form-field><input matInput formControlName="idReceipt"></mat-form-field></div>
+
+    <mat-form-field>
+        <mat-label>Pedido</mat-label>
+        <mat-select formControlName="order" [compareWith]="compareFnOrder">
+            @for (o of orderService.$listChange(); track o.idOrder) {
+                <mat-option [value]="o">Pedido #{{o.idOrder}} - S/ {{o.total}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Tipo de Comprobante</mat-label>
+        <input matInput placeholder="BOLETA / FACTURA" formControlName="receiptType">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Serie</mat-label>
+        <input matInput placeholder="Ej. F001" formControlName="series">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Número de Comprobante</mat-label>
+        <input matInput placeholder="Ej. 000123" formControlName="receiptNumber">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Fecha de Emisión</mat-label>
+        <input matInput type="datetime-local" formControlName="emissionDate">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Subtotal</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="subTotal">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>IGV</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="igv">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Total</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="totalAmount">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Método de Pago</mat-label>
+        <input matInput placeholder="EFECTIVO / TARJETA / TRANSFERENCIA" formControlName="paymentMethod">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Estado</mat-label>
+        <input matInput placeholder="EMITIDO / ANULADO" formControlName="status">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Razón Social</mat-label>
+        <input matInput formControlName="businessName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>RUC</mat-label>
+        <input matInput formControlName="ruc">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Dirección Fiscal</mat-label>
+        <input matInput formControlName="fiscalAddress">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/payment-receipt">
+        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    </button>
+</form>

@@ -77,7 +77,7 @@ export class LoginComponent {
         const token = data.access_token || data.accessToken;
         if (token) {
           sessionStorage.setItem(environment.TOKEN_NAME, token);
-          this.router.navigate(['/pages/client']);
+          this.router.navigate(['/pages/business']);
         } else {
           this.isLoggingIn.set(false);
           this.loginError.set('Error en la respuesta del servidor. No se recibió el token.');

@@ -2,11 +2,20 @@ import { Routes } from '@angular/router';
 
 export const pagesRoutes: Routes = [
 
+  // Administrar Negocio (dashboard)
+  {
+    path: 'business',
+    loadComponent: () =>
+      import('./business/business.component').then((m) => m.BusinessComponent),
+    data: { title: 'Administrar Negocio' },
+  },
+
   // Clientes
   {
     path: 'client',
     loadComponent: () =>
       import('./client/client.component').then((m) => m.ClientComponent),
+    data: { title: 'Clientes' },
     children: [
       {
         path: 'new',
@@ -26,6 +35,7 @@ export const pagesRoutes: Routes = [
     path: 'supplier',
     loadComponent: () =>
       import('./supplier/supplier.component').then((m) => m.SupplierComponent),
+    data: { title: 'Proveedores' },
     children: [
       {
         path: 'new',
@@ -45,6 +55,7 @@ export const pagesRoutes: Routes = [
     path: 'role',
     loadComponent: () =>
       import('./role/role.component').then((m) => m.RoleComponent),
+    data: { title: 'Roles' },
     children: [
       {
         path: 'new',
@@ -64,6 +75,7 @@ export const pagesRoutes: Routes = [
     path: 'user',
     loadComponent: () =>
       import('./user/user.component').then((m) => m.UserComponent),
+    data: { title: 'Usuarios' },
     children: [
       {
         path: 'new',
@@ -83,6 +95,7 @@ export const pagesRoutes: Routes = [
     path: 'employee',
     loadComponent: () =>
       import('./employee/employee.component').then((m) => m.EmployeeComponent),
+    data: { title: 'Empleados' },
     children: [
       {
         path: 'new',
@@ -102,6 +115,7 @@ export const pagesRoutes: Routes = [
     path: 'shift',
     loadComponent: () =>
       import('./shift/shift.component').then((m) => m.ShiftComponent),
+    data: { title: 'Turnos' },
     children: [
       {
         path: 'new',
@@ -121,6 +135,7 @@ export const pagesRoutes: Routes = [
     path: 'ingredient-category',
     loadComponent: () =>
       import('./ingredient-category/ingredient-category.component').then((m) => m.IngredientCategoryComponent),
+    data: { title: 'Categorías de Ingrediente' },
     children: [
       {
         path: 'new',
@@ -140,6 +155,7 @@ export const pagesRoutes: Routes = [
     path: 'ingredient',
     loadComponent: () =>
       import('./ingredient/ingredient.component').then((m) => m.IngredientComponent),
+    data: { title: 'Ingredientes' },
     children: [
       {
         path: 'new',
@@ -159,6 +175,7 @@ export const pagesRoutes: Routes = [
     path: 'inventory',
     loadComponent: () =>
       import('./inventory/inventory.component').then((m) => m.InventoryComponent),
+    data: { title: 'Inventario' },
     children: [
       {
         path: 'new',
@@ -178,6 +195,7 @@ export const pagesRoutes: Routes = [
     path: 'menu',
     loadComponent: () =>
       import('./menu/menu.component').then((m) => m.MenuComponent),
+    data: { title: 'Cartas' },
     children: [
       {
         path: 'new',
@@ -197,6 +215,7 @@ export const pagesRoutes: Routes = [
     path: 'product-category',
     loadComponent: () =>
       import('./product-category/product-category.component').then((m) => m.ProductCategoryComponent),
+    data: { title: 'Categorías de Producto' },
     children: [
       {
         path: 'new',
@@ -216,6 +235,7 @@ export const pagesRoutes: Routes = [
     path: 'product',
     loadComponent: () =>
       import('./product/product.component').then((m) => m.ProductComponent),
+    data: { title: 'Productos' },
     children: [
       {
         path: 'new',
@@ -235,6 +255,7 @@ export const pagesRoutes: Routes = [
     path: 'promotion',
     loadComponent: () =>
       import('./promotion/promotion.component').then((m) => m.PromotionComponent),
+    data: { title: 'Promociones' },
     children: [
       {
         path: 'new',
@@ -254,6 +275,7 @@ export const pagesRoutes: Routes = [
     path: 'restaurant-table',
     loadComponent: () =>
       import('./restaurant-table/restaurant-table.component').then((m) => m.RestaurantTableComponent),
+    data: { title: 'Mesas' },
     children: [
       {
         path: 'new',
@@ -273,6 +295,7 @@ export const pagesRoutes: Routes = [
     path: 'reservation',
     loadComponent: () =>
       import('./reservation/reservation.component').then((m) => m.ReservationComponent),
+    data: { title: 'Reservaciones' },
     children: [
       {
         path: 'new',
@@ -292,6 +315,7 @@ export const pagesRoutes: Routes = [
     path: 'contract',
     loadComponent: () =>
       import('./contract/contract.component').then((m) => m.ContractComponent),
+    data: { title: 'Contratos' },
     children: [
       {
         path: 'new',
@@ -311,6 +335,7 @@ export const pagesRoutes: Routes = [
     path: 'order',
     loadComponent: () =>
       import('./order/order.component').then((m) => m.OrderComponent),
+    data: { title: 'Pedidos' },
     children: [
       {
         path: 'new',
@@ -330,6 +355,7 @@ export const pagesRoutes: Routes = [
     path: 'payment',
     loadComponent: () =>
       import('./payment/payment.component').then((m) => m.PaymentComponent),
+    data: { title: 'Pagos' },
     children: [
       {
         path: 'new',
@@ -344,6 +370,26 @@ export const pagesRoutes: Routes = [
     ],
   },
 
+  // Comprobantes de Pago
+  {
+    path: 'payment-receipt',
+    loadComponent: () =>
+      import('./payment-receipt/payment-receipt.component').then((m) => m.PaymentReceiptComponent),
+    data: { title: 'Comprobantes de Pago' },
+    children: [
+      {
+        path: 'new',
+        loadComponent: () =>
+          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then((m) => m.PaymentReceiptEditComponent),
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () =>
+          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then((m) => m.PaymentReceiptEditComponent),
+      },
+    ],
+  },
+
   // Ruta por defecto
-  { path: '', redirectTo: 'client', pathMatch: 'full' },
+  { path: '', redirectTo: 'business', pathMatch: 'full' },
 ];

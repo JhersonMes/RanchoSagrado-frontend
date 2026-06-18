@@ -1,29 +1,69 @@
-.example-container {
+.app-shell {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    background-color: var(--color-bg);
 }
 
-.example-sidenav-container {
+.app-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background-color: var(--brand-100);
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.app-topbar-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.app-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.app-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.25;
+}
+
+.app-user-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.app-user-role {
+    font-size: 12px;
+    color: var(--color-text-soft);
+}
+
+.app-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--brand-700);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.app-content {
     flex: 1;
-}
-
-.example-spacer {
-    flex: 1 1 auto;
-}
-
-.active {
-    background-color: #dcdcdcc1;
-}
-
-
-.myButton:focus {
-    box-shadow: 0 0 rgba(255, 255, 255, 1) !important;
-    transition: none !important;
-    background-color: rgba(255, 255, 255, 1) !important;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 1) !important;
 }

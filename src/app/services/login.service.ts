@@ -32,6 +32,6 @@ export class LoginService {
   }
 
   showUserInfo(){
-    return this.http.get<{ username: string }>(`${environment.HOST}/auth/user`);
+    return this.http.get<any>(`${environment.HOST}/auth/user`);
   }
 }
