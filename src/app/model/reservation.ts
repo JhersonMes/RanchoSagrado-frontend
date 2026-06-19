@@ -1,4 +1,4 @@
-import { Client } from './client';
+import { Client } from './client';// Importa las entidades relacionadas con clientes y mesas del restaurante.
 import { RestaurantTable } from './restauranttable';
 
 export interface Reservation {
