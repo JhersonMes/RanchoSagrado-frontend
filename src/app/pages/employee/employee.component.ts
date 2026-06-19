@@ -34,7 +34,7 @@ export class EmployeeComponent {
   protected displayedColumns = ['idEmployee', 'name', 'lastName', 'dni', 'job', 'phone', 'status', 'actions'];
 
   constructor() {
-    this.service.findAll().subscribe(data => this.service.setListChange(data));
+    this.service.findAll().subscribe(data => this.service.setListChange(data));// Muestra un mensaje informativo y limpia el estado del mensaje después de notificar al usuario.
 
     effect(() => {
       const ds = this.$dataSource();
