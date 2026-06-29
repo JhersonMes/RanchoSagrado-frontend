@@ -1,0 +1,13 @@
+@if (showTitle) {
+  <h2 class="form-header-title">{{ title }}</h2>
+}
+<div class="form-progress">
+  <div class="form-progress-row">
+    <span>Completitud del Registro</span>
+    <span class="form-progress-percent">{{ progress().percent }}%</span>
+  </div>
+  <div class="form-progress-track">
+    <div class="form-progress-fill" [style.width.%]="progress().percent"></div>
+  </div>
+  <p class="form-progress-label">{{ progress().completed }} de {{ progress().total }} campos</p>
+</div>

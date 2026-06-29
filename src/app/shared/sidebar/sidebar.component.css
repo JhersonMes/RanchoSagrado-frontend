@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.sidebar-brand {
+  padding: 24px 16px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.sidebar-brand-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.sidebar-brand-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--brand-700);
+  letter-spacing: -0.01em;
+}
+
+.sidebar-brand-subtitle {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+}
+
+.sidebar-link-active::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background-color: #f59e0b;
+}
