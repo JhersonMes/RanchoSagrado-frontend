@@ -1,20 +1,30 @@
 import { Routes } from '@angular/router';
+import { noCajeroGuard } from '../guards/no-cajero.guard';
 
 export const pagesRoutes: Routes = [
+  // Advertencia previa a Administrar Negocio
+  {
+    path: 'business-warning',
+    loadComponent: () =>
+      import('./business-warning/business-warning.component').then(
+        (m) => m.BusinessWarningComponent,
+      ),
+    data: { title: 'Administrar Negocio' },
+    canActivate: [noCajeroGuard],
+  },
 
   // Administrar Negocio (dashboard)
   {
     path: 'business',
-    loadComponent: () =>
-      import('./business/business.component').then((m) => m.BusinessComponent),
+    loadComponent: () => import('./business/business.component').then((m) => m.BusinessComponent),
     data: { title: 'Administrar Negocio' },
+    canActivate: [noCajeroGuard],
   },
 
   // Clientes
   {
     path: 'client',
-    loadComponent: () =>
-      import('./client/client.component').then((m) => m.ClientComponent),
+    loadComponent: () => import('./client/client.component').then((m) => m.ClientComponent),
     data: { title: 'Clientes' },
     children: [
       {
@@ -33,19 +43,22 @@ export const pagesRoutes: Routes = [
   // Proveedores
   {
     path: 'supplier',
-    loadComponent: () =>
-      import('./supplier/supplier.component').then((m) => m.SupplierComponent),
+    loadComponent: () => import('./supplier/supplier.component').then((m) => m.SupplierComponent),
     data: { title: 'Proveedores' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./supplier/supplier-edit/supplier-edit.component').then((m) => m.SupplierEditComponent),
+          import('./supplier/supplier-edit/supplier-edit.component').then(
+            (m) => m.SupplierEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./supplier/supplier-edit/supplier-edit.component').then((m) => m.SupplierEditComponent),
+          import('./supplier/supplier-edit/supplier-edit.component').then(
+            (m) => m.SupplierEditComponent,
+          ),
       },
     ],
   },
@@ -53,8 +66,7 @@ export const pagesRoutes: Routes = [
   // Roles
   {
     path: 'role',
-    loadComponent: () =>
-      import('./role/role.component').then((m) => m.RoleComponent),
+    loadComponent: () => import('./role/role.component').then((m) => m.RoleComponent),
     data: { title: 'Roles' },
     children: [
       {
@@ -73,8 +85,7 @@ export const pagesRoutes: Routes = [
   // Usuarios
   {
     path: 'user',
-    loadComponent: () =>
-      import('./user/user.component').then((m) => m.UserComponent),
+    loadComponent: () => import('./user/user.component').then((m) => m.UserComponent),
     data: { title: 'Usuarios' },
     children: [
       {
@@ -93,19 +104,22 @@ export const pagesRoutes: Routes = [
   // Empleados
   {
     path: 'employee',
-    loadComponent: () =>
-      import('./employee/employee.component').then((m) => m.EmployeeComponent),
+    loadComponent: () => import('./employee/employee.component').then((m) => m.EmployeeComponent),
     data: { title: 'Empleados' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./employee/employee-edit/employee-edit.component').then((m) => m.EmployeeEditComponent),
+          import('./employee/employee-edit/employee-edit.component').then(
+            (m) => m.EmployeeEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./employee/employee-edit/employee-edit.component').then((m) => m.EmployeeEditComponent),
+          import('./employee/employee-edit/employee-edit.component').then(
+            (m) => m.EmployeeEditComponent,
+          ),
       },
     ],
   },
@@ -113,8 +127,7 @@ export const pagesRoutes: Routes = [
   // Turnos
   {
     path: 'shift',
-    loadComponent: () =>
-      import('./shift/shift.component').then((m) => m.ShiftComponent),
+    loadComponent: () => import('./shift/shift.component').then((m) => m.ShiftComponent),
     data: { title: 'Turnos' },
     children: [
       {
@@ -134,18 +147,24 @@ export const pagesRoutes: Routes = [
   {
     path: 'ingredient-category',
     loadComponent: () =>
-      import('./ingredient-category/ingredient-category.component').then((m) => m.IngredientCategoryComponent),
+      import('./ingredient-category/ingredient-category.component').then(
+        (m) => m.IngredientCategoryComponent,
+      ),
     data: { title: 'Categorías de Ingrediente' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./ingredient-category/ingredient-category-edit/ingredient-category-edit.component').then((m) => m.IngredientCategoryEditComponent),
+          import('./ingredient-category/ingredient-category-edit/ingredient-category-edit.component').then(
+            (m) => m.IngredientCategoryEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./ingredient-category/ingredient-category-edit/ingredient-category-edit.component').then((m) => m.IngredientCategoryEditComponent),
+          import('./ingredient-category/ingredient-category-edit/ingredient-category-edit.component').then(
+            (m) => m.IngredientCategoryEditComponent,
+          ),
       },
     ],
   },
@@ -160,12 +179,16 @@ export const pagesRoutes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./ingredient/ingredient-edit/ingredient-edit.component').then((m) => m.IngredientEditComponent),
+          import('./ingredient/ingredient-edit/ingredient-edit.component').then(
+            (m) => m.IngredientEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./ingredient/ingredient-edit/ingredient-edit.component').then((m) => m.IngredientEditComponent),
+          import('./ingredient/ingredient-edit/ingredient-edit.component').then(
+            (m) => m.IngredientEditComponent,
+          ),
       },
     ],
   },
@@ -180,12 +203,16 @@ export const pagesRoutes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./inventory/inventory-edit/inventory-edit.component').then((m) => m.InventoryEditComponent),
+          import('./inventory/inventory-edit/inventory-edit.component').then(
+            (m) => m.InventoryEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./inventory/inventory-edit/inventory-edit.component').then((m) => m.InventoryEditComponent),
+          import('./inventory/inventory-edit/inventory-edit.component').then(
+            (m) => m.InventoryEditComponent,
+          ),
       },
     ],
   },
@@ -193,8 +220,7 @@ export const pagesRoutes: Routes = [
   // Menús
   {
     path: 'menu',
-    loadComponent: () =>
-      import('./menu/menu.component').then((m) => m.MenuComponent),
+    loadComponent: () => import('./menu/menu.component').then((m) => m.MenuComponent),
     data: { title: 'Cartas' },
     children: [
       {
@@ -214,18 +240,24 @@ export const pagesRoutes: Routes = [
   {
     path: 'product-category',
     loadComponent: () =>
-      import('./product-category/product-category.component').then((m) => m.ProductCategoryComponent),
+      import('./product-category/product-category.component').then(
+        (m) => m.ProductCategoryComponent,
+      ),
     data: { title: 'Categorías de Producto' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./product-category/product-category-edit/product-category-edit.component').then((m) => m.ProductCategoryEditComponent),
+          import('./product-category/product-category-edit/product-category-edit.component').then(
+            (m) => m.ProductCategoryEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./product-category/product-category-edit/product-category-edit.component').then((m) => m.ProductCategoryEditComponent),
+          import('./product-category/product-category-edit/product-category-edit.component').then(
+            (m) => m.ProductCategoryEditComponent,
+          ),
       },
     ],
   },
@@ -233,19 +265,22 @@ export const pagesRoutes: Routes = [
   // Productos
   {
     path: 'product',
-    loadComponent: () =>
-      import('./product/product.component').then((m) => m.ProductComponent),
+    loadComponent: () => import('./product/product.component').then((m) => m.ProductComponent),
     data: { title: 'Productos' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./product/product-edit/product-edit.component').then((m) => m.ProductEditComponent),
+          import('./product/product-edit/product-edit.component').then(
+            (m) => m.ProductEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./product/product-edit/product-edit.component').then((m) => m.ProductEditComponent),
+          import('./product/product-edit/product-edit.component').then(
+            (m) => m.ProductEditComponent,
+          ),
       },
     ],
   },
@@ -260,12 +295,16 @@ export const pagesRoutes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./promotion/promotion-edit/promotion-edit.component').then((m) => m.PromotionEditComponent),
+          import('./promotion/promotion-edit/promotion-edit.component').then(
+            (m) => m.PromotionEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./promotion/promotion-edit/promotion-edit.component').then((m) => m.PromotionEditComponent),
+          import('./promotion/promotion-edit/promotion-edit.component').then(
+            (m) => m.PromotionEditComponent,
+          ),
       },
     ],
   },
@@ -274,18 +313,24 @@ export const pagesRoutes: Routes = [
   {
     path: 'restaurant-table',
     loadComponent: () =>
-      import('./restaurant-table/restaurant-table.component').then((m) => m.RestaurantTableComponent),
+      import('./restaurant-table/restaurant-table.component').then(
+        (m) => m.RestaurantTableComponent,
+      ),
     data: { title: 'Mesas' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./restaurant-table/restaurant-table-edit/restaurant-table-edit.component').then((m) => m.RestaurantTableEditComponent),
+          import('./restaurant-table/restaurant-table-edit/restaurant-table-edit.component').then(
+            (m) => m.RestaurantTableEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./restaurant-table/restaurant-table-edit/restaurant-table-edit.component').then((m) => m.RestaurantTableEditComponent),
+          import('./restaurant-table/restaurant-table-edit/restaurant-table-edit.component').then(
+            (m) => m.RestaurantTableEditComponent,
+          ),
       },
     ],
   },
@@ -300,12 +345,16 @@ export const pagesRoutes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./reservation/reservation-edit/reservation-edit.component').then((m) => m.ReservationEditComponent),
+          import('./reservation/reservation-edit/reservation-edit.component').then(
+            (m) => m.ReservationEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./reservation/reservation-edit/reservation-edit.component').then((m) => m.ReservationEditComponent),
+          import('./reservation/reservation-edit/reservation-edit.component').then(
+            (m) => m.ReservationEditComponent,
+          ),
       },
     ],
   },
@@ -313,19 +362,22 @@ export const pagesRoutes: Routes = [
   // Contratos
   {
     path: 'contract',
-    loadComponent: () =>
-      import('./contract/contract.component').then((m) => m.ContractComponent),
+    loadComponent: () => import('./contract/contract.component').then((m) => m.ContractComponent),
     data: { title: 'Contratos' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./contract/contract-edit/contract-edit.component').then((m) => m.ContractEditComponent),
+          import('./contract/contract-edit/contract-edit.component').then(
+            (m) => m.ContractEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./contract/contract-edit/contract-edit.component').then((m) => m.ContractEditComponent),
+          import('./contract/contract-edit/contract-edit.component').then(
+            (m) => m.ContractEditComponent,
+          ),
       },
     ],
   },
@@ -333,8 +385,7 @@ export const pagesRoutes: Routes = [
   // Pedidos
   {
     path: 'order',
-    loadComponent: () =>
-      import('./order/order.component').then((m) => m.OrderComponent),
+    loadComponent: () => import('./order/order.component').then((m) => m.OrderComponent),
     data: { title: 'Pedidos' },
     children: [
       {
@@ -353,19 +404,22 @@ export const pagesRoutes: Routes = [
   // Pagos
   {
     path: 'payment',
-    loadComponent: () =>
-      import('./payment/payment.component').then((m) => m.PaymentComponent),
+    loadComponent: () => import('./payment/payment.component').then((m) => m.PaymentComponent),
     data: { title: 'Pagos' },
     children: [
       {
         path: 'new',
         loadComponent: () =>
-          import('./payment/payment-edit/payment-edit.component').then((m) => m.PaymentEditComponent),
+          import('./payment/payment-edit/payment-edit.component').then(
+            (m) => m.PaymentEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./payment/payment-edit/payment-edit.component').then((m) => m.PaymentEditComponent),
+          import('./payment/payment-edit/payment-edit.component').then(
+            (m) => m.PaymentEditComponent,
+          ),
       },
     ],
   },
@@ -380,12 +434,16 @@ export const pagesRoutes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then((m) => m.PaymentReceiptEditComponent),
+          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then(
+            (m) => m.PaymentReceiptEditComponent,
+          ),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then((m) => m.PaymentReceiptEditComponent),
+          import('./payment-receipt/payment-receipt-edit/payment-receipt-edit.component').then(
+            (m) => m.PaymentReceiptEditComponent,
+          ),
       },
     ],
   },
