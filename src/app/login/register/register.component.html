@@ -1,134 +1,231 @@
-<div class="login-container">
-  <div class="login-overlay"></div>
+<div class="min-h-screen flex flex-col bg-slate-50">
 
-  <mat-card class="login-card mat-elevation-z8">
-    <mat-card-header class="card-header">
-      <div class="logo-placeholder">
-        <mat-icon>restaurant</mat-icon>
-      </div>
-      <mat-card-title>Crear Cuenta</mat-card-title>
-      <mat-card-subtitle>Regístrate en RanchoOnline</mat-card-subtitle>
-    </mat-card-header>
+  <main class="flex-1 flex flex-col items-center px-4 py-12">
 
-    <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="register()" class="login-form">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-extrabold text-red-700">Rancho Online</h1>
+      <p class="mt-2 text-slate-500">Gestión de cocina de alto rendimiento</p>
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre de usuario</mat-label>
+    <div class="w-full max-w-md rounded-2xl bg-white shadow-xl shadow-slate-200 border border-slate-100 overflow-hidden">
+
+      <nav class="flex text-center">
+        <a
+          routerLink="/login"
+          routerLinkActive="!text-red-700 !border-red-700"
+          class="flex-1 py-4 font-semibold border-b-2 border-transparent text-slate-400 transition-colors"
+        >
+          Iniciar Sesión
+        </a>
+        <a
+          routerLink="/register"
+          routerLinkActive="!text-red-700 !border-red-700"
+          class="flex-1 py-4 font-semibold border-b-2 border-transparent text-slate-400 transition-colors"
+        >
+          Registrarse
+        </a>
+      </nav>
+
+      <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate class="px-8 py-7">
+
+        <label class="block text-sm text-slate-600 mb-1.5">Nombre de usuario</label>
+        <div class="relative mb-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
           <input
-            matInput
+            type="text"
             formControlName="username"
             placeholder="johndoe"
-            type="text"
+            class="w-full rounded-lg border border-slate-200 pl-10 pr-3 py-3 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400"
           />
-          <mat-icon matPrefix>person</mat-icon>
-          @if (registerForm.get('username')?.hasError('required') && registerForm.get('username')?.touched) {
-            <mat-error>El usuario es obligatorio</mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (registerForm.get('username')?.touched && registerForm.get('username')?.hasError('required')) {
+          <p class="text-xs text-red-600 mb-2">El usuario es obligatorio</p>
+        }
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Correo electrónico</mat-label>
+        <label class="block text-sm text-slate-600 mt-5 mb-1.5">Correo electrónico</label>
+        <div class="relative mb-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
           <input
-            matInput
-            formControlName="email"
-            placeholder="usuario@correo.com"
             type="email"
+            formControlName="email"
+            placeholder="nombre@ejemplo.com"
+            class="w-full rounded-lg border border-slate-200 pl-10 pr-3 py-3 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400"
           />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched) {
-            <mat-error>El correo es obligatorio</mat-error>
-          }
-          @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
-            <mat-error>Formato de correo inválido</mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')) {
+          <p class="text-xs text-red-600 mb-2">El correo es obligatorio</p>
+        }
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')) {
+          <p class="text-xs text-red-600 mb-2">Formato de correo inválido</p>
+        }
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contraseña</mat-label>
+        <label class="block text-sm text-slate-600 mt-5 mb-1.5">Contraseña</label>
+        <div class="relative mb-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 9.75h10.5a2.25 2.25 0 002.25-2.25v-5.25a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v5.25a2.25 2.25 0 002.25 2.25z" />
+          </svg>
           <input
-            matInput
-            formControlName="password"
             [type]="showPassword ? 'text' : 'password'"
-            placeholder="********"
+            formControlName="password"
+            autocomplete="new-password"
+            class="w-full rounded-lg border border-slate-200 pl-10 pr-10 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400"
           />
-          <mat-icon matPrefix>lock</mat-icon>
           <button
-            mat-icon-button
-            matSuffix
-            (click)="togglePassword()"
             type="button"
-            aria-label="Toggle password visibility"
+            (click)="togglePassword()"
+            aria-label="Mostrar u ocultar contraseña"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
           >
-            <mat-icon>{{ showPassword ? "visibility_off" : "visibility" }}</mat-icon>
+            @if (showPassword) {
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            } @else {
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            }
           </button>
-          @if (registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched) {
-            <mat-error>La contraseña es obligatoria</mat-error>
-          }
-        </mat-form-field>
+        </div>
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')) {
+          <p class="text-xs text-red-600 mb-2">La contraseña es obligatoria</p>
+        }
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')) {
+          <p class="text-xs text-red-600 mb-2">Mínimo 3 caracteres</p>
+        }
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Empleado asociado</mat-label>
-          <mat-select formControlName="employee" [compareWith]="compareFnEmployee">
-            @for (e of employeeService.$listChange(); track e.idEmployee) {
-              <mat-option [value]="e">{{e.name}} {{e.lastName}}</mat-option>
+        <label class="block text-sm text-slate-600 mt-5 mb-1.5">Repetir contraseña</label>
+        <div class="relative mb-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 9.75h10.5a2.25 2.25 0 002.25-2.25v-5.25a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v5.25a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            class="w-full rounded-lg border border-slate-200 pl-10 pr-10 py-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400"
+          />
+          <button
+            type="button"
+            (click)="toggleConfirmPassword()"
+            aria-label="Mostrar u ocultar contraseña"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+          >
+            @if (showConfirmPassword) {
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            } @else {
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
             }
-          </mat-select>
-          <mat-icon matPrefix>badge</mat-icon>
-          @if (registerForm.get('employee')?.hasError('required') && registerForm.get('employee')?.touched) {
-            <mat-error>Seleccionar empleado es obligatorio</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Rol del usuario</mat-label>
-          <mat-select formControlName="role" [compareWith]="compareFnRole">
-            @for (r of roleService.$listChange(); track r.idRole) {
-              <mat-option [value]="r">{{r.name}}</mat-option>
-            }
-          </mat-select>
-          <mat-icon matPrefix>admin_panel_settings</mat-icon>
-          @if (registerForm.get('role')?.hasError('required') && registerForm.get('role')?.touched) {
-            <mat-error>Seleccionar rol es obligatorio</mat-error>
-          }
-        </mat-form-field>
+          </button>
+        </div>
+        @if (registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('required')) {
+          <p class="text-xs text-red-600 mb-2">Repite la contraseña</p>
+        }
+        @if (registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordsMismatch')) {
+          <p class="text-xs text-red-600 mb-2">Las contraseñas no coinciden</p>
+        }
 
         @if (registerError()) {
-          <div class="error-banner" role="alert">
-            <mat-icon>error_outline</mat-icon>
+          <div class="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2.5 mt-3 text-sm text-red-700" role="alert">
+            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
             <span>{{ registerError() }}</span>
           </div>
         }
 
         <button
-          mat-flat-button
-          class="btn-submit"
           type="submit"
           [disabled]="!isFormValid() || isRegistering()"
+          class="w-full mt-6 rounded-lg bg-red-700 py-3.5 font-bold uppercase tracking-wide text-white shadow-md hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           @if (isRegistering()) {
-            <ng-container>
-              <mat-spinner diameter="20" color="accent"></mat-spinner>
-              <span>Registrando...</span>
-            </ng-container>
+            <span>Registrando...</span>
           } @else {
-            <ng-container>
-              <mat-icon>person_add</mat-icon>
-              <span>Crear cuenta</span>
-            </ng-container>
+            <span>Crear Cuenta</span>
           }
         </button>
 
-        <div class="actions">
-          <a routerLink="/login" class="forgot-password">¿Ya tienes cuenta? Iniciar sesión</a>
-        </div>
+        <hr class="my-6 border-slate-100" />
+
+        <p class="text-center text-sm text-slate-600">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login" class="font-semibold text-red-700 hover:underline">Iniciar Sesión</a>
+        </p>
 
       </form>
-    </mat-card-content>
 
-    <div class="card-footer">
-      <span>El Rancho Sagrado &middot; Cajamarca, Perú</span>
+      <div class="h-1 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400"></div>
     </div>
 
-  </mat-card>
+    <div class="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-800">Alta Velocidad</p>
+          <p class="text-sm text-slate-500">Optimizado para flujos de trabajo rápidos.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/40 p-4">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-800">Stock Preciso</p>
+          <p class="text-sm text-slate-500">Control total de inventario en tiempo real.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12c0 4.556-3.04 8.396-7.5 9.75a1.5 1.5 0 01-1 0C8.04 20.396 5 16.556 5 12V6.5a1 1 0 01.804-.982l6.5-1.43a1 1 0 01.392 0l6.5 1.43a1 1 0 01.804.982V12z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-800">Seguridad</p>
+          <p class="text-sm text-slate-500">Acceso encriptado y seguro para el staff.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="text-center sm:text-left">
+        <p class="font-bold text-red-700">Rancho Online</p>
+        <p class="text-xs text-slate-500">&copy; 2024 Rancho Online. All rights reserved.</p>
+      </div>
+      <div class="flex items-center gap-5 text-sm text-slate-500">
+        <a href="#" class="hover:text-red-700">Ayuda</a>
+        <a href="#" class="hover:text-red-700">Privacidad</a>
+        <a href="#" class="hover:text-red-700">Contacto</a>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18" />
+        </svg>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 1118 0v6M21 19.5a1.5 1.5 0 01-1.5 1.5h-1A1.5 1.5 0 0117 19.5v-3A1.5 1.5 0 0118.5 15h2.25M3 19.5A1.5 1.5 0 004.5 21h1A1.5 1.5 0 007 19.5v-3A1.5 1.5 0 005.5 15H3.25" />
+        </svg>
+      </div>
+    </div>
+  </footer>
+
 </div>

@@ -1,55 +1,32 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    RouterLink,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-
   private readonly loginService = inject(LoginService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
+    password: new FormControl('', [Validators.required, Validators.minLength(3)]),
   });
 
-  isFormValid = toSignal(
-    this.loginForm.statusChanges.pipe(map((status) => status === 'VALID')),
-    { initialValue: this.loginForm.valid }
-  );
+  isFormValid = toSignal(this.loginForm.statusChanges.pipe(map((status) => status === 'VALID')), {
+    initialValue: this.loginForm.valid,
+  });
 
   isLoggingIn = signal(false);
 
@@ -77,7 +54,14 @@ export class LoginComponent {
         const token = data.access_token || data.accessToken;
         if (token) {
           sessionStorage.setItem(environment.TOKEN_NAME, token);
-          this.router.navigate(['/pages/business']);
+          this.authService.fetchCurrentUser().subscribe({
+            next: (user) => {
+              this.router.navigate([this.authService.resolveHomeRoute(user?.role?.name)]);
+            },
+            error: () => {
+              this.router.navigate(['/pages/business']);
+            },
+          });
         } else {
           this.isLoggingIn.set(false);
           this.loginError.set('Error en la respuesta del servidor. No se recibió el token.');

@@ -1,72 +1,62 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterLink } from '@angular/router';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { LoginService } from '../../services/login.service';
-import { EmployeeService } from '../../services/employee.service';
-import { RoleService } from '../../services/rol.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';
+
+function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  return password && confirmPassword && password !== confirmPassword
+    ? { passwordsMismatch: true }
+    : null;
+}
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    RouterLink,
-    MatSnackBarModule,
-    MatSelectModule
-  ],
+  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
-  protected readonly employeeService = inject(EmployeeService);
-  protected readonly roleService = inject(RoleService);
 
-  registerForm: FormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    employee: new FormControl<any>(null, [Validators.required]),
-    role: new FormControl<any>(null, [Validators.required]),
-  });
-
-  constructor() {
-    this.employeeService.findAll().subscribe(data => this.employeeService.setListChange(data));
-    this.roleService.findAll().subscribe(data => this.roleService.setListChange(data));
-  }
-
-  compareFnEmployee(a: any, b: any): boolean { return a && b ? a.idEmployee === b.idEmployee : a === b; }
-  compareFnRole(a: any, b: any): boolean { return a && b ? a.idRole === b.idRole : a === b; }
+  registerForm: FormGroup = new FormGroup(
+    {
+      username: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    },
+    { validators: passwordsMatchValidator },
+  );
 
   isFormValid = toSignal(
     this.registerForm.statusChanges.pipe(map((status) => status === 'VALID')),
-    { initialValue: this.registerForm.valid }
+    { initialValue: this.registerForm.valid },
   );
 
   isRegistering = signal(false);
   registerError = signal<string | null>(null);
   showPassword = false;
+  showConfirmPassword = false;
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   register(): void {
@@ -78,11 +68,10 @@ export class RegisterComponent {
     this.isRegistering.set(true);
     this.registerError.set(null);
 
-    const { username, email, password, employee, role } = this.registerForm.value;
+    const { username, email, password } = this.registerForm.value;
 
-    this.loginService.register(username, email, password, employee, role).subscribe({
+    this.loginService.register(username, email, password).subscribe({
       next: () => {
-        this.snackBar.open('Usuario registrado exitosamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/login']);
       },
       error: (err) => {
