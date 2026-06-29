@@ -1,3 +1,25 @@
 :host {
   display: block;
 }
+
+.dashboard-card.locked {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: var(--color-surface-muted, #f8fafc);
+}
+
+.dashboard-card.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.dashboard-card.locked .dashboard-card-icon {
+  color: var(--color-text-soft, #94a3b8);
+}
+
+.dashboard-card-lock-message {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #dc2626;
+}

@@ -1,4 +1,6 @@
 <form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <app-form-header [title]="$isEdit() ? 'Editar Empleado' : 'Agregar Empleado'" [form]="$form()"></app-form-header>
+
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idEmployee"></mat-form-field></div>
 
     <mat-form-field>
@@ -13,7 +15,7 @@
 
     <mat-form-field>
         <mat-label>DNI</mat-label>
-        <input matInput placeholder="DNI" formControlName="dni">
+        <input matInput placeholder="DNI" formControlName="dni" appDniInput>
     </mat-form-field>
 
     <mat-form-field>
@@ -23,7 +25,7 @@
 
     <mat-form-field>
         <mat-label>Phone</mat-label>
-        <input matInput placeholder="Phone" formControlName="phone">
+        <input matInput placeholder="Phone" formControlName="phone" appPhoneInput>
     </mat-form-field>
 
     <mat-form-field>
@@ -36,8 +38,10 @@
         <input matInput placeholder="ACTIVO / INACTIVO" formControlName="status">
     </mat-form-field>
 
-    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <div class="form-actions">
+    <button mat-flat-button type="submit"><span>Guardar</span><mat-icon>done</mat-icon></button>
     <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/employee">
-        <span>Cancel</span><mat-icon>cancel</mat-icon>
+        <span>Cancelar</span><mat-icon>cancel</mat-icon>
     </button>
+</div>
 </form>

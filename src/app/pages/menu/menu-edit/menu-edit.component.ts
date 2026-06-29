@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,10 +10,11 @@ import { MenuService } from '../../../services/menu.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Menu } from '../../../model/menu';
 import { switchMap, tap } from 'rxjs';
+import { positivePriceValidator } from '../../../shared/app-validators';
 
 @Component({
   selector: 'app-menu-edit',
-  imports: [
+  imports: [FormHeaderComponent, 
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,7 +36,7 @@ export class MenuEditComponent {
     name: new FormControl<string>('', [Validators.required]),
     dishQuantity: new FormControl<number | null>(null, [Validators.required]),
     description: new FormControl<string>(''),
-    price: new FormControl<number | null>(null, [Validators.required]),
+    price: new FormControl<number | null>(null, [Validators.required, positivePriceValidator]),
   }));
 
   private readonly $params = toSignal(this.route.params, { initialValue: {} });

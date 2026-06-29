@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Page } from '../model/page';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,11 @@ export abstract class GenericService<T> {
 
   findAll() {
     return this.http.get<T[]>(this.url);
+  }
+
+  findAllPageable(page: number, size: number) {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<Page<T>>(`${this.url}/pageable`, { params });
   }
 
   findById(id: number) {

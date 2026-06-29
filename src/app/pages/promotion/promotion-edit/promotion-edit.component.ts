@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +14,7 @@ import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-promotion-edit',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatCheckboxModule],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatCheckboxModule],
   templateUrl: './promotion-edit.component.html',
   styleUrl: './promotion-edit.component.css',
 })

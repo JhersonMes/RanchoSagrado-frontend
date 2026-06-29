@@ -1,8 +1,16 @@
-<form [formGroup]="$form()" (submit)="operate()" class="example-container">
+<div class="order-edit-layout">
+  <form [formGroup]="$form()" (submit)="operate()" class="example-container order-form">
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idOrder"></mat-form-field></div>
 
+    <h2 class="order-form-title">
+      <mat-icon>receipt_long</mat-icon>
+      {{ $isEdit() ? 'Editar Pedido' : 'Nuevo Pedido' }}
+    </h2>
+
+    <app-form-header [title]="''" [showTitle]="false" [form]="$form()" class="order-form-progress"></app-form-header>
+
     <mat-form-field>
-        <mat-label>Employee</mat-label>
+        <mat-label><mat-icon class="field-icon">badge</mat-icon> Empleado</mat-label>
         <mat-select formControlName="employee" [compareWith]="compareFnEmployee">
             @for (e of employeeService.$listChange(); track e.idEmployee) {
                 <mat-option [value]="e">{{e.name}} {{e.lastName}}</mat-option>
@@ -11,9 +19,9 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Client (optional)</mat-label>
+        <mat-label><mat-icon class="field-icon">person</mat-icon> Cliente (opcional)</mat-label>
         <mat-select formControlName="client" [compareWith]="compareFnClient">
-            <mat-option [value]="null">-- None --</mat-option>
+            <mat-option [value]="null">-- Ninguno --</mat-option>
             @for (c of clientService.$listChange(); track c.idClient) {
                 <mat-option [value]="c">{{c.name}} {{c.lastName}}</mat-option>
             }
@@ -21,42 +29,167 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Table (optional)</mat-label>
+        <mat-label><mat-icon class="field-icon">table_restaurant</mat-icon> Mesa (opcional)</mat-label>
         <mat-select formControlName="restaurantTable" [compareWith]="compareFnTable">
-            <mat-option [value]="null">-- None --</mat-option>
+            <mat-option [value]="null">-- Ninguna --</mat-option>
             @for (t of tableService.$listChange(); track t.idTable) {
-                <mat-option [value]="t">Table #{{t.tableNumber}}</mat-option>
+                <mat-option [value]="t">Mesa #{{t.tableNumber}}</mat-option>
             }
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Order Date</mat-label>
-        <input matInput type="datetime-local" formControlName="orderDate">
-    </mat-form-field>
+    <div class="lockable-field">
+      <mat-form-field>
+          <mat-label><mat-icon class="field-icon">event</mat-icon> Fecha del Pedido</mat-label>
+          <input matInput type="datetime-local" formControlName="orderDate">
+      </mat-form-field>
+      <button type="button" class="lockable-field-toggle" (click)="toggleDateLock()" [attr.aria-label]="dateLocked() ? 'Desbloquear fecha' : 'Bloquear fecha'">
+        <mat-icon>{{ dateLocked() ? 'lock' : 'edit' }}</mat-icon>
+      </button>
+    </div>
 
     <mat-form-field>
-        <mat-label>Status</mat-label>
+        <mat-label><mat-icon class="field-icon">flag</mat-icon> Estado</mat-label>
         <input matInput placeholder="PENDIENTE / EN_PROCESO / LISTO..." formControlName="status">
     </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Sub Total</mat-label>
-        <input matInput type="number" placeholder="0.00" formControlName="subTotal">
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-label>Total</mat-label>
-        <input matInput type="number" placeholder="0.00" formControlName="total">
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-label>Detail</mat-label>
-        <input matInput placeholder="Notes..." formControlName="detail">
-    </mat-form-field>
-
-    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
-    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/order">
-        <span>Cancel</span><mat-icon>cancel</mat-icon>
+    <button type="button" class="btn-secondary-outline" (click)="openProductModal()">
+      <mat-icon>restaurant_menu</mat-icon>
+      Seleccionar Productos
     </button>
-</form>
+
+    <div class="lockable-field">
+      <mat-form-field>
+          <mat-label><mat-icon class="field-icon">calculate</mat-icon> Sub Total</mat-label>
+          <input matInput type="number" placeholder="0.00" formControlName="subTotal">
+      </mat-form-field>
+      <button type="button" class="lockable-field-toggle" (click)="toggleSubTotalLock()" [attr.aria-label]="subTotalLocked() ? 'Desbloquear subtotal' : 'Bloquear subtotal'">
+        <mat-icon>{{ subTotalLocked() ? 'lock' : 'edit' }}</mat-icon>
+      </button>
+    </div>
+
+    <div class="lockable-field">
+      <mat-form-field>
+          <mat-label><mat-icon class="field-icon">payments</mat-icon> Total (con IGV)</mat-label>
+          <input matInput type="number" placeholder="0.00" formControlName="total">
+      </mat-form-field>
+      <button type="button" class="lockable-field-toggle" (click)="toggleTotalLock()" [attr.aria-label]="totalLocked() ? 'Desbloquear total' : 'Bloquear total'">
+        <mat-icon>{{ totalLocked() ? 'lock' : 'edit' }}</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field>
+        <mat-label><mat-icon class="field-icon">notes</mat-icon> Detalle</mat-label>
+        <input matInput placeholder="Notas..." formControlName="detail">
+    </mat-form-field>
+
+    <div class="form-actions">
+    <button mat-flat-button type="submit"><span>Guardar</span><mat-icon>done</mat-icon></button>
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/order">
+        <span>Cancelar</span><mat-icon>cancel</mat-icon>
+    </button>
+    </div>
+  </form>
+
+  <aside class="order-summary">
+    <h3 class="order-summary-title">
+      <mat-icon>shopping_cart</mat-icon>
+      Resumen del Pedido
+    </h3>
+    <p class="order-summary-subtitle">Productos seleccionados para este pedido.</p>
+
+    @if (selectedProducts().length) {
+      <ul class="order-summary-list">
+        @for (p of selectedProducts(); track p.idProduct) {
+          <li>
+            <span>{{ p.name }}</span>
+            <span class="order-summary-price">
+              S/ {{ p.price | number:'1.2-2' }}
+              <button type="button" class="order-summary-remove" (click)="removeProduct(p)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="order-summary-empty">Aún no has seleccionado productos.</p>
+    }
+
+    <div class="order-summary-totals">
+      <div class="order-summary-row">
+        <span>Subtotal</span>
+        <span>S/ {{ subTotalCalc() | number:'1.2-2' }}</span>
+      </div>
+      <div class="order-summary-row">
+        <span>IGV (18%)</span>
+        <span>S/ {{ igvCalc() | number:'1.2-2' }}</span>
+      </div>
+      <div class="order-summary-row order-summary-total">
+        <span>Total</span>
+        <span>S/ {{ totalCalc() | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <button type="button" class="btn-secondary-outline" [disabled]="!selectedProducts().length" (click)="applySelection()">
+      <mat-icon>sync_alt</mat-icon>
+      Aplicar al Pedido
+    </button>
+  </aside>
+</div>
+
+@if (showProductModal()) {
+  <div class="modal-overlay" (click)="closeProductModal()">
+    <div class="modal-panel" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3><mat-icon>restaurant_menu</mat-icon> Seleccionar Productos</h3>
+        <button type="button" class="modal-close" (click)="closeProductModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-search">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          placeholder="Buscar producto..."
+          [value]="productSearch()"
+          (input)="productSearch.set($any($event.target).value)"
+        >
+      </div>
+
+      <div class="modal-body">
+        @for (group of productsByCategory(); track group.name) {
+          <div class="modal-category">
+            <p class="modal-category-title">{{ group.name }}</p>
+            <ul class="modal-product-list">
+              @for (p of group.items; track p.idProduct) {
+                <li>
+                  <label class="modal-product-item">
+                    <input
+                      type="checkbox"
+                      [checked]="isProductSelected(p)"
+                      (change)="toggleProduct(p)"
+                    >
+                    <span class="modal-product-name">{{ p.name }}</span>
+                    <span class="modal-product-price">S/ {{ p.price | number:'1.2-2' }}</span>
+                  </label>
+                </li>
+              }
+            </ul>
+          </div>
+        } @empty {
+          <p class="order-summary-empty">No se encontraron productos.</p>
+        }
+      </div>
+
+      <div class="modal-footer">
+        <span>{{ selectedProducts().length }} producto(s) seleccionado(s)</span>
+        <button type="button" class="btn-primary" (click)="applySelection()">
+          <mat-icon>check</mat-icon>
+          Confirmar Selección
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,4 +1,6 @@
 <form [formGroup]="$form()" (submit)="operate()" class="example-container" #frmClient="ngForm">
+    <app-form-header [title]="$isEdit() ? 'Editar Cliente' : 'Agregar Cliente'" [form]="$form()"></app-form-header>
+
 
     <div [hidden]="true">
         <mat-form-field>
@@ -9,7 +11,7 @@
 
     <mat-form-field>
         <mat-label>DNI</mat-label>
-        <input matInput placeholder="DNI" formControlName="dni" type="number">
+        <input matInput placeholder="DNI" formControlName="dni" type="number" appDniInput>
     </mat-form-field>
 
     <mat-form-field>
@@ -24,7 +26,7 @@
 
     <mat-form-field>
         <mat-label>Phone</mat-label>
-        <input matInput placeholder="Phone" formControlName="phone">
+        <input matInput placeholder="Phone" formControlName="phone" appPhoneInput>
     </mat-form-field>
 
     <mat-form-field>
@@ -47,14 +49,15 @@
         <input matInput placeholder="RUC" formControlName="ruc">
     </mat-form-field>
 
+    <div class="form-actions">
     <button mat-flat-button type="submit">
-        <span>OK</span>
+        <span>Guardar</span>
         <mat-icon>done</mat-icon>
     </button>
-
     <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/client">
-        <span>Cancel</span>
+        <span>Cancelar</span>
         <mat-icon>cancel</mat-icon>
     </button>
+</div>
 
 </form>

@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,10 +13,11 @@ import { ProductCategoryService } from '../../../services/productcategory.servic
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Product } from '../../../model/product';
 import { switchMap, tap } from 'rxjs';
+import { positivePriceValidator } from '../../../shared/app-validators';
 
 @Component({
   selector: 'app-product-edit',
-  imports: [
+  imports: [FormHeaderComponent, 
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule, RouterLink,
     MatSelectModule, MatCheckboxModule
@@ -35,7 +37,7 @@ export class ProductEditComponent {
     name: new FormControl<string>('', [Validators.required]),
     description: new FormControl<string>(''),
     preparationTime: new FormControl<number | null>(null, [Validators.required]),
-    price: new FormControl<number | null>(null, [Validators.required]),
+    price: new FormControl<number | null>(null, [Validators.required, positivePriceValidator]),
     availability: new FormControl<boolean>(true),
     category: new FormControl<any>(null, [Validators.required]),
   }));

@@ -1,0 +1,150 @@
+<div class="min-h-screen flex bg-slate-50">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+  <app-header title="Dashboard"></app-header>
+
+  <main class="flex-1 px-8 py-6">
+
+    <h1 class="text-2xl font-extrabold text-slate-800">Hola de nuevo, Administrador</h1>
+    <p class="text-slate-500 mb-6">Aquí tienes un resumen de lo que está pasando hoy en tu restaurante.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5 relative overflow-hidden">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-lg bg-amber-400 flex items-center justify-center text-white">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 8.25v9A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25v-9M2.25 8.25l1.5-3.75A2.25 2.25 0 015.86 3h12.28a2.25 2.25 0 012.11 1.5l1.5 3.75" />
+            </svg>
+          </div>
+          <span
+            class="inline-flex items-center rounded-full text-xs font-semibold px-2 py-0.5"
+            [class.bg-green-50]="ingresosVariacion() >= 0"
+            [class.text-green-600]="ingresosVariacion() >= 0"
+            [class.bg-red-50]="ingresosVariacion() < 0"
+            [class.text-red-600]="ingresosVariacion() < 0"
+          >
+            {{ ingresosVariacion() >= 0 ? '+' : '' }}{{ ingresosVariacion() }}% hoy
+          </span>
+        </div>
+        <p class="text-sm text-slate-500">Ingresos Totales</p>
+        <p class="text-2xl font-extrabold text-slate-900 mt-1">{{ ingresosTotales() | currency:'USD':'symbol':'1.2-2' }}</p>
+        <svg class="w-full h-10 mt-2" viewBox="0 0 100 30" preserveAspectRatio="none">
+          <path [attr.d]="salesAreaPath()" fill="rgba(251,191,36,0.18)"></path>
+          <path [attr.d]="salesLinePath()" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-lg bg-red-600 flex items-center justify-center text-white">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75M3.75 6.75h16.5M3.75 6.75v10.5A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V6.75M3.75 6.75L6 3.75h12l2.25 3" />
+            </svg>
+          </div>
+        </div>
+        <p class="text-sm text-slate-500">Pedidos Activos</p>
+        <p class="text-2xl font-extrabold text-slate-900 mt-1">{{ pedidosActivos() }}</p>
+        <p class="text-xs text-slate-400 mt-2">{{ pedidosEnPreparacion() }} en preparación &middot; {{ pedidosListos() }} listos</p>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-start justify-between mb-3">
+          <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5M3.75 9v8.25A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V9M3.75 9l1.5-4.5h13.5l1.5 4.5M8.25 13.5v4.5M15.75 13.5v4.5" />
+            </svg>
+          </div>
+        </div>
+        <p class="text-sm text-slate-500">Ocupación de Mesas</p>
+        <p class="text-2xl font-extrabold text-slate-900 mt-1">{{ ocupacionMesas() }}%</p>
+        <div class="h-2 rounded-full bg-slate-100 mt-3 overflow-hidden">
+          <div class="h-full bg-amber-400" [style.width.%]="ocupacionMesas()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-center justify-between mb-1">
+          <p class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Alertas de Inventario</p>
+          <span class="inline-block rounded-full bg-red-50 text-red-600 text-xs font-semibold px-2 py-0.5">Crítico</span>
+        </div>
+        <p class="text-2xl font-extrabold text-slate-900 mb-3">{{ alertasInventario().length }} Items</p>
+        @if (alertasInventario().length) {
+          <ul class="space-y-2 text-sm">
+            @for (item of alertasInventario(); track item.idInventory) {
+              <li class="flex items-center justify-between">
+                <span class="text-slate-700">{{ item.ingredient.name }}</span>
+                <span class="text-red-600 font-medium">{{ item.stockQuantity <= 0 ? 'Agotado' : 'Bajo Stock' }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="text-sm text-slate-400">Sin alertas de inventario.</p>
+        }
+        <a routerLink="/pages/inventory" class="text-sm font-semibold text-red-700 hover:underline mt-3 inline-block">Ver detalles</a>
+      </div>
+
+      <div class="rounded-xl bg-amber-400 p-6 grid grid-cols-3 divide-x divide-black/15 text-slate-900">
+        <div class="flex flex-col items-center justify-center text-center px-2">
+          <p class="text-3xl font-extrabold">{{ reservacionesHoy() }}</p>
+          <p class="text-sm font-medium mt-1">Reservaciones Hoy</p>
+        </div>
+        <div class="flex flex-col items-center justify-center text-center px-2">
+          <p class="text-3xl font-extrabold">{{ mesasDisponibles() }}</p>
+          <p class="text-sm font-medium mt-1">Mesas Disponibles</p>
+        </div>
+        <div class="flex flex-col items-center justify-center text-center px-2">
+          <p class="text-3xl font-extrabold">{{ cubiertosHoy() }}</p>
+          <p class="text-sm font-medium mt-1">Cubiertos hoy</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-center justify-between mb-3">
+          <p class="font-semibold text-slate-800">Actividad Reciente</p>
+        </div>
+        @if (actividadReciente().length) {
+          <ul class="space-y-3 text-sm">
+            @for (item of actividadReciente(); track item.label) {
+              <li class="flex items-center justify-between">
+                <span class="text-slate-700">{{ item.label }}</span>
+                <span class="text-slate-400 text-xs">{{ item.date | date:'short' }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="text-sm text-slate-400">Aún no hay actividad para mostrar.</p>
+        }
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="font-semibold text-slate-800 mb-3">Staff en Turno</p>
+        @if (staffEnTurno().length) {
+          <ul class="space-y-3 text-sm">
+            @for (employee of staffEnTurno(); track employee.idEmployee) {
+              <li class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600">{{ staffInitial(employee.name) }}</div>
+                <div class="flex-1">
+                  <p class="font-medium text-slate-800">{{ employee.name }} {{ employee.lastName }}</p>
+                  <p class="text-xs text-slate-400">{{ employee.job }}</p>
+                </div>
+                <span class="h-2.5 w-2.5 rounded-full bg-green-500"></span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="text-sm text-slate-400">No hay personal activo registrado.</p>
+        }
+        <a routerLink="/pages/employee" class="w-full mt-4 rounded-lg border border-slate-200 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50 block text-center">Gestionar Personal</a>
+      </div>
+    </div>
+
+  </main>
+  </div>
+
+</div>

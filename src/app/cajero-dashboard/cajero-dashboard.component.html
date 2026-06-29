@@ -1,0 +1,110 @@
+<div class="min-h-screen flex bg-slate-50">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+  <app-header title="Dashboard Económico" searchPlaceholder="Buscar orden..."></app-header>
+
+  <main class="flex-1 px-8 py-6">
+
+    <h1 class="text-2xl font-extrabold text-slate-800">Bienvenido de nuevo, {{ userName() }}</h1>
+    <p class="text-slate-500 mb-6">Resumen Financiero Diario</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500">Ventas Diarias</p>
+        <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ ventasDiarias() | currency:'USD':'symbol':'1.2-2' }}</p>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500">Pagos Pendientes</p>
+        <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ pagosPendientes() | currency:'USD':'symbol':'1.2-2' }}</p>
+        <span class="inline-block mt-2 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold px-2 py-0.5">{{ mesasPendientes() }} mesas</span>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500 mb-2">Distribución de Pagos</p>
+        <div class="flex h-2 rounded-full overflow-hidden mb-2">
+          <div class="bg-red-700" [style.width.%]="distribucionPagos().efectivo"></div>
+          <div class="bg-amber-300" [style.width.%]="distribucionPagos().tarjeta"></div>
+        </div>
+        <div class="flex justify-between text-xs text-slate-500">
+          <span><span class="inline-block h-2 w-2 rounded-full bg-red-700 mr-1"></span>Efectivo {{ distribucionPagos().efectivo }}%</span>
+          <span><span class="inline-block h-2 w-2 rounded-full bg-amber-300 mr-1"></span>Tarjeta {{ distribucionPagos().tarjeta }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-center justify-between mb-3">
+          <p class="font-semibold text-slate-800">Órdenes listas para cobro</p>
+          <a routerLink="/pages/order" class="text-sm font-semibold text-red-700 hover:underline">Ver todas</a>
+        </div>
+        @if (ordenesListasParaCobro().length) {
+          <ul class="space-y-3 text-sm">
+            @for (orden of ordenesListasParaCobro(); track orden.idOrder) {
+              <li class="flex items-center justify-between">
+                <div>
+                  <p class="font-medium text-slate-800">Mesa {{ orden.restaurantTable?.tableNumber ?? '-' }}</p>
+                  <p class="text-xs text-slate-400">{{ orden.client?.name ?? 'Sin cliente' }}</p>
+                </div>
+                <span class="font-semibold text-slate-800">{{ orden.total | currency:'USD':'symbol':'1.2-2' }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="text-sm text-slate-400">No hay órdenes listas para cobro.</p>
+        }
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="font-semibold text-slate-800 mb-4">Pagos pendientes vs. Atendidos</p>
+        <div class="flex items-center gap-6">
+          <div class="h-32 w-32 rounded-full shrink-0" [style.background]="pieChartGradient()"></div>
+          <div class="flex flex-col gap-2 text-sm">
+            <span class="flex items-center gap-2">
+              <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-700"></span>
+              Atendidos {{ pieChartData().atendidosPct }}%
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="inline-block h-2.5 w-2.5 rounded-full bg-amber-300"></span>
+              Pendientes {{ pieChartData().pendientesPct }}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="font-semibold text-slate-800 mb-4">Ventas por día</p>
+        <div class="flex items-end justify-between gap-3 h-40">
+          @for (dia of ventasPorDia(); track dia.label) {
+            <div class="flex flex-col items-center gap-1 flex-1">
+              <div class="w-full rounded-t-md bg-red-700" [style.height.%]="(dia.total / ventasPorDiaMax()) * 100"></div>
+              <span class="text-xs text-slate-500">{{ dia.label }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="rounded-2xl bg-amber-400 p-5 text-white card-shadow">
+          <span class="inline-block rounded-full bg-white/20 text-xs font-bold px-2 py-0.5 mb-2">NUEVO</span>
+          <p class="font-bold text-lg">Acepta Pagos con QR</p>
+          <p class="text-sm">Cobra más rápido escaneando el código del cliente.</p>
+        </div>
+
+        <div class="rounded-2xl bg-red-700 p-5 text-white card-shadow">
+          <p class="font-bold text-lg mb-1">Asistencia Rápida</p>
+          <p class="text-sm mb-3">¿Tienes un problema con una transacción?</p>
+          <button class="rounded-lg bg-white text-red-700 font-semibold px-4 py-2 text-sm hover:bg-red-50">Llamar Soporte</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  </div>
+
+</div>

@@ -4,7 +4,7 @@ import { UserService } from '../../services/user.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { switchMap, tap } from 'rxjs';
+import { PageableSearch } from '../../shared/pageable-search';
 
 @Component({
   selector: 'app-user',
@@ -37,9 +38,12 @@ export class UserComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   protected $dataSource = signal(new MatTableDataSource<User>());
-  protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
   protected $users = this.userService.$listChange;
+  protected readonly pageable = new PageableSearch<User>(
+    (page, size) => this.userService.findAllPageable(page, size),
+    () => this.$users(),
+  );
 
   protected displayedColumns: string[] = [
     'idUser', 'username', 'email', 'employee', 'role', 'enabled', 'actions'
@@ -47,14 +51,12 @@ export class UserComponent {
 
   constructor() {
     this.userService.findAll().subscribe(data => this.userService.setListChange(data));
+    this.pageable.loadServerPage();
 
     effect(() => {
-      const data = this.$users();
-      const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
-      ds.data = data;
-      ds.paginator = p;
+      ds.data = this.pageable.data();
       ds.sort = s;
     });
 
@@ -68,7 +70,7 @@ export class UserComponent {
   }
 
   applyFilter(e: any) {
-    this.$dataSource().filter = (e.target.value as string).trim().toLowerCase();
+    this.pageable.applyFilter(e.target.value as string);
   }
 
   delete(idUser: number) {
@@ -78,7 +80,8 @@ export class UserComponent {
         .pipe(
           switchMap(() => this.userService.findAll()),
           tap(data => this.userService.setListChange(data)),
-          tap(() => this.userService.setMessageChange('DELETED'))
+          tap(() => this.userService.setMessageChange('DELETED')),
+          tap(() => this.pageable.loadServerPage())
         )
         .subscribe();
     }

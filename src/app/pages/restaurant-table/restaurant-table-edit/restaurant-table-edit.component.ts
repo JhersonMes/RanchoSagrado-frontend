@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +13,7 @@ import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-restaurant-table-edit',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './restaurant-table-edit.component.html',
   styleUrl: './restaurant-table-edit.component.css',
 })

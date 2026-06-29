@@ -1,13 +1,35 @@
-<div class="page">
-  <div class="dashboard-grid">
-    @for (card of cards; track card.title) {
-      <a class="dashboard-card" [routerLink]="card.link">
-        <span class="dashboard-card-icon"><mat-icon>{{ card.icon }}</mat-icon></span>
-        <span>
-          <p class="dashboard-card-title">{{ card.title }}</p>
-          <p class="dashboard-card-subtitle">{{ card.subtitle }}</p>
-        </span>
-      </a>
-    }
+<div class="business-page">
+  <div class="business-page-header">
+    <h1 class="business-page-title">Administrar Negocio</h1>
+    <p class="business-page-subtitle">Selecciona una sección para ver y administrar sus registros.</p>
   </div>
+
+  @for (section of sections; track section.title) {
+    <section class="business-section">
+      <h2 class="business-section-title">{{ section.title }}</h2>
+      <div class="dashboard-grid">
+        @for (card of section.cards; track card.title) {
+          @if (isLocked(card)) {
+            <div class="dashboard-card locked" [attr.aria-disabled]="true">
+              <span class="dashboard-card-icon"><mat-icon>lock</mat-icon></span>
+              <span class="dashboard-card-body">
+                <p class="dashboard-card-lock-message">{{ lockMessage(card) }}</p>
+                <p class="dashboard-card-title">{{ card.title }}</p>
+                <p class="dashboard-card-subtitle">{{ card.subtitle }}</p>
+              </span>
+            </div>
+          } @else {
+            <a class="dashboard-card" [routerLink]="card.link">
+              <span class="dashboard-card-icon"><mat-icon>{{ card.icon }}</mat-icon></span>
+              <span class="dashboard-card-body">
+                <p class="dashboard-card-title">{{ card.title }}</p>
+                <p class="dashboard-card-subtitle">{{ card.subtitle }}</p>
+              </span>
+              <mat-icon class="dashboard-card-arrow">chevron_right</mat-icon>
+            </a>
+          }
+        }
+      </div>
+    </section>
+  }
 </div>

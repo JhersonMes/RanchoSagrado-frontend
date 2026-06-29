@@ -1,0 +1,44 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+  <div class="max-w-lg w-full rounded-2xl bg-white border border-slate-100 card-shadow p-8">
+    <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-700 mb-5">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008M10.29 3.86l-8.18 14.18A1.5 1.5 0 003.5 20.25h17a1.5 1.5 0 001.39-2.21L13.71 3.86a1.5 1.5 0 00-2.42 0z" />
+      </svg>
+    </div>
+
+    <h1 class="text-xl font-extrabold text-slate-800 mb-2">Advertencia: Administrar Negocio</h1>
+    <p class="text-sm text-slate-500 mb-4">
+      Estás a punto de ingresar al panel de administración del negocio. Desde aquí podrás
+      <strong class="text-slate-700">crear, editar y eliminar</strong> registros de tablas críticas
+      (clientes, productos, inventario, pagos, empleados, entre otras).
+    </p>
+    <p class="text-sm text-slate-500 mb-5">
+      Estas acciones modifican datos en producción y pueden ser irreversibles. Asegúrate de comprender
+      el impacto antes de continuar.
+    </p>
+
+    <label class="flex items-start gap-3 mb-6 cursor-pointer">
+      <input
+        type="checkbox"
+        class="mt-0.5 h-4 w-4 rounded border-slate-300 text-red-700 focus:ring-red-700"
+        [checked]="confirmed()"
+        (change)="confirmed.set($any($event.target).checked)"
+      />
+      <span class="text-sm text-slate-700">
+        Entiendo los riesgos de modificar las tablas del negocio y deseo continuar.
+      </span>
+    </label>
+
+    <div class="flex justify-end gap-3">
+      <button type="button" (click)="cancelar()" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancelar</button>
+      <button
+        type="button"
+        [disabled]="!confirmed()"
+        (click)="continuar()"
+        class="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        Continuar
+      </button>
+    </div>
+  </div>
+</div>

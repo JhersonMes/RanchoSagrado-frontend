@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,10 +10,12 @@ import { EmployeeService } from '../../../services/employee.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Employee } from '../../../model/employee';
 import { switchMap, tap } from 'rxjs';
+import { dniValidator, phoneValidator } from '../../../shared/app-validators';
+import { DniInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-employee-edit',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, PhoneInputDirective, DniInputDirective],
   templateUrl: './employee-edit.component.html',
   styleUrl: './employee-edit.component.css',
 })
@@ -28,9 +31,9 @@ export class EmployeeEditComponent {
     lastName: new FormControl<string>('', [Validators.required]),
     address: new FormControl<string>('', [Validators.required]),
     job: new FormControl<string>('', [Validators.required]),
-    phone: new FormControl<string>('', [Validators.required]),
+    phone: new FormControl<string>('', [Validators.required, phoneValidator]),
     status: new FormControl<string>('ACTIVO', [Validators.required]),
-    dni: new FormControl<string>('', [Validators.required]),
+    dni: new FormControl<string>('', [Validators.required, dniValidator]),
   }));
 
   private readonly $params = toSignal(this.route.params, { initialValue: {} });

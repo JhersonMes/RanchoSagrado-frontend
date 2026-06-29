@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,16 +10,20 @@ import { ClientService } from '../../../services/client.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Client } from '../../../model/client';
 import { switchMap, tap } from 'rxjs';
+import { dniValidator, phoneValidator } from '../../../shared/app-validators';
+import { DniInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-client-edit',
-  imports: [
+  imports: [FormHeaderComponent, 
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink
+    RouterLink,
+    PhoneInputDirective,
+    DniInputDirective
   ],
   templateUrl: './client-edit.component.html',
   styleUrl: './client-edit.component.css',
@@ -31,10 +36,10 @@ export class ClientEditComponent {
 
   protected $form = signal(new FormGroup({
     idClient: new FormControl<number | null>(null),
-    dni: new FormControl<number | null>(null),
+    dni: new FormControl<number | null>(null, [dniValidator]),
     name: new FormControl<string>(''),
     lastName: new FormControl<string>(''),
-    phone: new FormControl<string>(''),
+    phone: new FormControl<string>('', [phoneValidator]),
     email: new FormControl<string>(''),
     birthDate: new FormControl<Date | string | null>(null),
     address: new FormControl<string>(''),

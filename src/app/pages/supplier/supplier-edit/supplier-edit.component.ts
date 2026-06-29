@@ -1,3 +1,4 @@
+import { FormHeaderComponent } from '../../../shared/form-header/form-header.component';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,16 +10,19 @@ import { SupplierService } from '../../../services/supplier.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Supplier } from '../../../model/supplier';
 import { switchMap, tap } from 'rxjs';
+import { phoneValidator } from '../../../shared/app-validators';
+import { PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-supplier-edit',
-  imports: [
+  imports: [FormHeaderComponent, 
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink
+    RouterLink,
+    PhoneInputDirective
   ],
   templateUrl: './supplier-edit.component.html',
   styleUrl: './supplier-edit.component.css',
@@ -34,7 +38,7 @@ export class SupplierEditComponent {
     companyName: new FormControl<string>('', [Validators.required]),
     ruc: new FormControl<string>('', [Validators.required]),
     contactEmail: new FormControl<string>('', [Validators.required, Validators.email]),
-    phone: new FormControl<string>('', [Validators.required]),
+    phone: new FormControl<string>('', [Validators.required, phoneValidator]),
     address: new FormControl<string>('', [Validators.required]),
     supplyType: new FormControl<string>('', [Validators.required]),
     status: new FormControl<string>('', [Validators.required]),

@@ -1,4 +1,6 @@
 <form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <app-form-header [title]="$isEdit() ? 'Editar Pago' : 'Agregar Pago'" [form]="$form()"></app-form-header>
+
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idPayment"></mat-form-field></div>
 
     <mat-form-field>
@@ -10,15 +12,25 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Payment Date</mat-label>
-        <input matInput type="datetime-local" formControlName="paymentDate">
-    </mat-form-field>
+    <div class="lockable-field">
+      <mat-form-field>
+          <mat-label>Payment Date</mat-label>
+          <input matInput type="datetime-local" formControlName="paymentDate">
+      </mat-form-field>
+      <button type="button" class="lockable-field-toggle" (click)="toggleDateLock()" [attr.aria-label]="dateLocked() ? 'Desbloquear fecha' : 'Bloquear fecha'">
+        <mat-icon>{{ dateLocked() ? 'lock' : 'edit' }}</mat-icon>
+      </button>
+    </div>
 
-    <mat-form-field>
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" placeholder="0.00" formControlName="amount">
-    </mat-form-field>
+    <div class="lockable-field">
+      <mat-form-field>
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" placeholder="0.00" formControlName="amount">
+      </mat-form-field>
+      <button type="button" class="lockable-field-toggle" (click)="toggleAmountLock()" [attr.aria-label]="amountLocked() ? 'Desbloquear monto' : 'Bloquear monto'">
+        <mat-icon>{{ amountLocked() ? 'lock' : 'edit' }}</mat-icon>
+      </button>
+    </div>
 
     <mat-form-field>
         <mat-label>Payment Method</mat-label>
@@ -35,8 +47,10 @@
         <input matInput placeholder="PENDIENTE / PAGADO / RECHAZADO" formControlName="status">
     </mat-form-field>
 
-    <button mat-flat-button type="submit"><span>OK</span><mat-icon>done</mat-icon></button>
+    <div class="form-actions">
+    <button mat-flat-button type="submit"><span>Guardar</span><mat-icon>done</mat-icon></button>
     <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/payment">
-        <span>Cancel</span><mat-icon>cancel</mat-icon>
+        <span>Cancelar</span><mat-icon>cancel</mat-icon>
     </button>
+</div>
 </form>

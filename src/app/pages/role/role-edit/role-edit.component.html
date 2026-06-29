@@ -1,4 +1,6 @@
 <form [formGroup]="$form()" (submit)="operate()" class="example-container">
+    <app-form-header [title]="$isEdit() ? 'Editar Rol' : 'Agregar Rol'" [form]="$form()"></app-form-header>
+
 
     <div [hidden]="true">
         <mat-form-field>
@@ -17,14 +19,15 @@
         <input matInput placeholder="Description" formControlName="description">
     </mat-form-field>
 
+    <div class="form-actions">
     <button mat-flat-button type="submit">
-        <span>OK</span>
+        <span>Guardar</span>
         <mat-icon>done</mat-icon>
     </button>
-
     <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/role">
-        <span>Cancel</span>
+        <span>Cancelar</span>
         <mat-icon>cancel</mat-icon>
     </button>
+</div>
 
 </form>

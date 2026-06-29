@@ -4,12 +4,13 @@ import { RoleService } from '../../services/rol.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { switchMap, tap } from 'rxjs';
+import { PageableSearch } from '../../shared/pageable-search';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -35,22 +36,23 @@ export class RoleComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   protected $dataSource = signal(new MatTableDataSource<Role>());
-  protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
   protected $roles = this.roleService.$listChange;
+  protected readonly pageable = new PageableSearch<Role>(
+    (page, size) => this.roleService.findAllPageable(page, size),
+    () => this.$roles(),
+  );
 
   protected displayedColumns: string[] = ['idRole', 'name', 'description', 'actions'];
 
   constructor() {
     this.roleService.findAll().subscribe(data => this.roleService.setListChange(data));
+    this.pageable.loadServerPage();
 
     effect(() => {
-      const data = this.$roles();
-      const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
-      ds.data = data;
-      ds.paginator = p;
+      ds.data = this.pageable.data();
       ds.sort = s;
     });
 
@@ -64,7 +66,7 @@ export class RoleComponent {
   }
 
   applyFilter(e: any) {
-    this.$dataSource().filter = (e.target.value as string).trim().toLowerCase();
+    this.pageable.applyFilter(e.target.value as string);
   }
 
   delete(idRole: number) {
@@ -74,7 +76,8 @@ export class RoleComponent {
         .pipe(
           switchMap(() => this.roleService.findAll()),
           tap(data => this.roleService.setListChange(data)),
-          tap(() => this.roleService.setMessageChange('DELETED'))
+          tap(() => this.roleService.setMessageChange('DELETED')),
+          tap(() => this.pageable.loadServerPage())
         )
         .subscribe();
     }
