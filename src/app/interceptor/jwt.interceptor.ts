@@ -3,19 +3,21 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+const PUBLIC_ENDPOINTS = ['/login', '/register'];
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JwtInterceptor implements HttpInterceptor {
-
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = sessionStorage.getItem(environment.TOKEN_NAME);
+    const isPublicEndpoint = PUBLIC_ENDPOINTS.some((path) => request.url.endsWith(path));
+    const token = !isPublicEndpoint ? sessionStorage.getItem(environment.TOKEN_NAME) : null;
 
     if (token) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
     }
 

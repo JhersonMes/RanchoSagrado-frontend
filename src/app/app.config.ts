@@ -1,9 +1,11 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
 import { CredentialsInterceptor } from './interceptor/credentials.interceptor';
 import { ServerErrorInterceptor } from './interceptor/server-error.interceptor';
+import { createSpanishPaginatorIntl } from './shared/spanish-paginator-intl';
 
 import { routes } from './app.routes';
 
@@ -12,7 +14,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptor,multi:true},
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
-  ]
+    { provide: MatPaginatorIntl, useFactory: createSpanishPaginatorIntl },
+  ],
 };
