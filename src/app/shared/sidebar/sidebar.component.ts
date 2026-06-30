@@ -37,7 +37,10 @@ export class SidebarComponent {
       'M2.25 8.25h19.5M2.25 8.25v9A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25v-9M2.25 8.25l1.5-3.75A2.25 2.25 0 015.86 3h12.28a2.25 2.25 0 012.11 1.5l1.5 3.75M6 15.75h3',
     Usuarios:
       'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0112.728 0zM15 16.125a4.125 4.125 0 10-7.533 2.493M15 16.125a4.125 4.125 0 00-7.533 2.493M8.25 9.75a3 3 0 116 0 3 3 0 01-6 0z',
-    Reservaciones: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+    Reservaciones:
+      'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+    PortalCliente:
+      'M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25',
     Empleados:
       'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-5.13a4 4 0 110-8 4 4 0 010 8zm6 0a3 3 0 100-6 3 3 0 000 6z',
   };
@@ -45,6 +48,7 @@ export class SidebarComponent {
   private static readonly ROLE_LINKS: Record<string, SidebarLink[]> = {
     administrador: [
       { label: 'Dashboard', link: '/admin/dashboard', icon: 'Dashboard' },
+      { label: 'Portal Cliente', link: '/cliente/dashboard', icon: 'PortalCliente' },
       { label: 'Administrar Negocio', link: '/pages/business-warning', icon: 'Negocio' },
       { label: 'Pedidos', link: '/pages/order', icon: 'Pedidos' },
       { label: 'Mesas', link: '/pages/restaurant-table', icon: 'Mesas' },
@@ -69,6 +73,7 @@ export class SidebarComponent {
       { label: 'Reservaciones', link: '/pages/reservation', icon: 'Reservaciones' },
     ],
     cliente: [
+      { label: 'Mi Portal', link: '/cliente/dashboard', icon: 'PortalCliente' },
       { label: 'Reservaciones', link: '/pages/reservation', icon: 'Reservaciones' },
       { label: 'Pedidos', link: '/pages/order', icon: 'Pedidos' },
     ],

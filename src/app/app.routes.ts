@@ -20,6 +20,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'cliente/dashboard',
+    loadComponent: () =>
+      import('./cliente-dashboard/cliente-dashboard.component').then(
+        (m) => m.ClienteDashboardComponent,
+      ),
+  },
+  {
     path: 'pages',
     component: LayoutComponent,
     loadChildren: () => import('./pages/pages.routes').then((m) => m.pagesRoutes),
