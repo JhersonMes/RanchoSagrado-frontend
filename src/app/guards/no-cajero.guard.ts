@@ -9,9 +9,13 @@ export const noCajeroGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   const checkRole = (): boolean => {
-    const isCajero = authService.roleName().toLowerCase().includes('caj');
-    if (isCajero) {
+    const role = authService.roleName().toLowerCase();
+    if (role.includes('caj') || role.includes('cash')) {
       router.navigate(['/cajero/dashboard']);
+      return false;
+    }
+    if (!role.includes('admin')) {
+      router.navigate([authService.resolveHomeRoute(authService.roleName())]);
       return false;
     }
     return true;
@@ -26,6 +30,6 @@ export const noCajeroGuard: CanActivateFn = () => {
     catchError(() => {
       router.navigate(['/login']);
       return of(false);
-    })
+    }),
   );
 };

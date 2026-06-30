@@ -59,7 +59,7 @@ export class LoginComponent {
               this.router.navigate([this.authService.resolveHomeRoute(user?.role?.name)]);
             },
             error: () => {
-              this.router.navigate(['/pages/business']);
+              this.router.navigate(['/pages/order']);
             },
           });
         } else {

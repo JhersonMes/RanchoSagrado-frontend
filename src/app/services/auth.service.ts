@@ -23,6 +23,9 @@ export class AuthService {
     const role = (roleName ?? '').toLowerCase();
     if (role.includes('admin')) return '/admin/dashboard';
     if (role.includes('caj') || role.includes('cash')) return '/cajero/dashboard';
-    return '/pages/business';
+    if (role.includes('chef')) return '/pages/product';
+    if (role.includes('mesero') || role.includes('waiter')) return '/pages/order';
+    if (role.includes('cliente') || role.includes('client')) return '/pages/reservation';
+    return '/pages/order';
   }
 }
