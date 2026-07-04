@@ -24,7 +24,7 @@ export class IngredientCategoryEditComponent {
   private readonly service = inject(IngredientCategoryService);
 
   protected $form = signal(new FormGroup({
-    idCategory: new FormControl<number | null>(null),
+    idCategory: new FormControl<number | null>({ value: null, disabled: true }),
     name: new FormControl<string>('', [Validators.required]),
   }));
 
@@ -43,7 +43,10 @@ export class IngredientCategoryEditComponent {
     if (this.$form().invalid) return;
     const isEdit = this.$isEdit();
     const id = this.$id();
-    const item: IngredientCategory = this.$form().value as unknown as IngredientCategory;
+    const item: IngredientCategory = this.$form().getRawValue() as unknown as IngredientCategory;
+    if (!isEdit) {
+      delete (item as any).idCategory;
+    }
     const op$ = isEdit ? this.service.update(id, item) : this.service.save(item);
     op$.pipe(
       switchMap(() => this.service.findAll()),

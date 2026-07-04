@@ -50,7 +50,11 @@
 
     <mat-form-field>
         <mat-label><mat-icon class="field-icon">flag</mat-icon> Estado</mat-label>
-        <input matInput placeholder="PENDIENTE / EN_PROCESO / LISTO..." formControlName="status">
+        <mat-select formControlName="status">
+            @for (s of statuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <button type="button" class="btn-secondary-outline" (click)="openProductModal()">
@@ -100,12 +104,12 @@
 
     @if (selectedProducts().length) {
       <ul class="order-summary-list">
-        @for (p of selectedProducts(); track p.idProduct) {
+        @for (p of selectedProducts(); track p.product.idProduct) {
           <li>
-            <span>{{ p.name }}</span>
+            <span>{{ p.quantity }}x {{ p.product.name }}</span>
             <span class="order-summary-price">
-              S/ {{ p.price | number:'1.2-2' }}
-              <button type="button" class="order-summary-remove" (click)="removeProduct(p)">
+              S/ {{ (p.product.price * p.quantity) | number:'1.2-2' }}
+              <button type="button" class="order-summary-remove" (click)="removeProduct(p.product)">
                 <mat-icon>close</mat-icon>
               </button>
             </span>
@@ -165,15 +169,21 @@
             <ul class="modal-product-list">
               @for (p of group.items; track p.idProduct) {
                 <li>
-                  <label class="modal-product-item">
-                    <input
-                      type="checkbox"
-                      [checked]="isProductSelected(p)"
-                      (change)="toggleProduct(p)"
-                    >
-                    <span class="modal-product-name">{{ p.name }}</span>
-                    <span class="modal-product-price">S/ {{ p.price | number:'1.2-2' }}</span>
-                  </label>
+                  <div class="modal-product-item">
+                    <div class="modal-product-info">
+                      <span class="modal-product-name">{{ p.name }}</span>
+                      <span class="modal-product-price">S/ {{ p.price | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="modal-product-controls">
+                      <button type="button" class="btn-icon" [disabled]="getQuantity(p) === 0" (click)="decreaseQuantity(p)">
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                      <span class="quantity-display">{{ getQuantity(p) }}</span>
+                      <button type="button" class="btn-icon" (click)="increaseQuantity(p)">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </div>
                 </li>
               }
             </ul>

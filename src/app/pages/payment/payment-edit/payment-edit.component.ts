@@ -41,6 +41,15 @@ export class PaymentEditComponent {
   protected $id = computed(() => this.$params()['id']);
   protected $isEdit = computed(() => !!this.$id());
 
+  protected readonly paymentMethods = ['EFECTIVO', 'TARJETA', 'YAPE', 'PLIN'];
+  protected readonly paymentStatuses = ['PENDIENTE', 'PAGADO', 'REEMBOLSADO'];
+
+  // Al crear un pago solo se listan pedidos LISTO (regla: el chef debe marcar listo antes de cobrar)
+  protected readonly selectableOrders = computed(() => {
+    const orders = this.orderService.$listChange();
+    return this.$isEdit() ? orders : orders.filter((o) => o.status === 'LISTO');
+  });
+
   protected readonly dateLocked = signal(true);
   protected readonly amountLocked = signal(true);
 
@@ -58,7 +67,8 @@ export class PaymentEditComponent {
       if (!this.$isEdit() && orderId && orders.length) {
         const order = orders.find((o) => o.idOrder === orderId);
         if (order) {
-          this.$form().patchValue({ order, amount: order.total });
+          // Cobro directo desde la lista de pedidos: preselecciona pedido, monto y estado PAGADO
+          this.$form().patchValue({ order, amount: order.total, status: 'PAGADO' });
         }
       }
     });
@@ -96,6 +106,9 @@ export class PaymentEditComponent {
       switchMap(() => this.service.findAll()),
       tap(data => this.service.setListChange(data)),
       tap(() => this.service.setMessageChange(isEdit ? 'UPDATED' : 'CREATED'))
-    ).subscribe(() => this.router.navigate(['/pages/payment']));
+    ).subscribe({
+      next: () => this.router.navigate(['/pages/payment']),
+      error: (err) => window.alert(err?.error?.message ?? 'No se pudo registrar el pago. Inténtalo de nuevo.'),
+    });
   }
 }

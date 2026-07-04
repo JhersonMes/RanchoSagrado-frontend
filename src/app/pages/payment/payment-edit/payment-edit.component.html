@@ -4,10 +4,10 @@
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idPayment"></mat-form-field></div>
 
     <mat-form-field>
-        <mat-label>Order</mat-label>
+        <mat-label>Pedido (solo pedidos LISTO)</mat-label>
         <mat-select formControlName="order" [compareWith]="compareFnOrder">
-            @for (o of orderService.$listChange(); track o.idOrder) {
-                <mat-option [value]="o">Order #{{o.idOrder}} - S/ {{o.total}}</mat-option>
+            @for (o of selectableOrders(); track o.idOrder) {
+                <mat-option [value]="o">Pedido #{{o.idOrder}} - S/ {{o.total}} ({{o.status}})</mat-option>
             }
         </mat-select>
     </mat-form-field>
@@ -33,18 +33,26 @@
     </div>
 
     <mat-form-field>
-        <mat-label>Payment Method</mat-label>
-        <input matInput placeholder="EFECTIVO / TARJETA / TRANSFERENCIA" formControlName="paymentMethod">
+        <mat-label>Método de Pago</mat-label>
+        <mat-select formControlName="paymentMethod">
+            @for (m of paymentMethods; track m) {
+                <mat-option [value]="m">{{ m }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Card Details</mat-label>
-        <input matInput placeholder="Last 4 digits..." formControlName="cardDetails">
+        <mat-label>Detalle de Tarjeta (opcional)</mat-label>
+        <input matInput placeholder="Últimos 4 dígitos..." formControlName="cardDetails">
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Status</mat-label>
-        <input matInput placeholder="PENDIENTE / PAGADO / RECHAZADO" formControlName="status">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+            @for (s of paymentStatuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <div class="form-actions">

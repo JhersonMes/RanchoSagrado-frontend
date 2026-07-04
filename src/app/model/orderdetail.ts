@@ -1,15 +1,11 @@
-import { Client } from './client';
-import { RestaurantTable } from './restauranttable';
-import { Employee } from './employee';
+import { Order } from './order';
+import { Product } from './product';
 
-export interface Order {
-  idOrder?: number;
-  orderDate: string; 
-  status: string;     
-  detail?: string;
-  subTotal: number;
-  total: number;
-  client?: Client;
-  restaurantTable?: RestaurantTable;
-  employee: Employee;
+export interface OrderDetail {
+  idOrderDetail?: number;
+  quantity: number;
+  unitPrice: number;
+  notes?: string;
+  order: Partial<Order> & { idOrder: number };
+  product: Product;
 }

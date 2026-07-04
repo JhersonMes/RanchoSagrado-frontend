@@ -5,5 +5,5 @@ import { IngredientCategory } from '../model/ingredientcategory';
 
 @Injectable({ providedIn: 'root' })
 export class IngredientCategoryService extends GenericSignalService<IngredientCategory> {
-  protected override url: string = `${environment.HOST}/ingredient-categories`;
+  protected override url: string = `${environment.HOST}/ingredient-category`;
 }

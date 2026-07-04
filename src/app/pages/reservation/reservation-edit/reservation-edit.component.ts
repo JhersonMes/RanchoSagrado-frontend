@@ -65,6 +65,9 @@ export class ReservationEditComponent {
     const isEdit = this.$isEdit();
     const id = this.$id();
     const item: Reservation = this.$form().value as unknown as Reservation;
+    if (!isEdit) {
+      delete (item as any).idReservation;
+    }
     const op$ = isEdit ? this.service.update(id, item) : this.service.save(item);
     op$.pipe(
       switchMap(() => this.service.findAll()),

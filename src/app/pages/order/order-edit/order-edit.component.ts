@@ -15,10 +15,26 @@ import { RestaurantTableService } from '../../../services/restauranttable.servic
 import { ProductService } from '../../../services/product.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Order } from '../../../model/order';
+import { OrderDetail } from '../../../model/orderdetail';
 import { Product } from '../../../model/product';
-import { switchMap, tap } from 'rxjs';
+import { OrderDetailService } from '../../../services/orderdetail.service';
+import { catchError, of, switchMap, tap } from 'rxjs';
+
+interface SelectedProduct {
+  product: Product;
+  quantity: number;
+}
 
 const IGV_RATE = 0.18;
+
+export const ORDER_STATUSES = [
+  'PENDIENTE',
+  'EN_PROCESO',
+  'LISTO',
+  'ENTREGADO',
+  'PAGADO',
+  'CANCELADO',
+] as const;
 
 @Component({
   selector: 'app-order-edit',
@@ -40,6 +56,8 @@ export class OrderEditComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly service = inject(OrderService);
+  private readonly orderDetailService = inject(OrderDetailService);
+  protected readonly statuses = ORDER_STATUSES;
   protected readonly clientService = inject(ClientService);
   protected readonly employeeService = inject(EmployeeService);
   protected readonly tableService = inject(RestaurantTableService);
@@ -69,7 +87,7 @@ export class OrderEditComponent {
 
   protected readonly showProductModal = signal(false);
   protected readonly productSearch = signal('');
-  protected readonly selectedProducts = signal<Product[]>([]);
+  protected readonly selectedProducts = signal<SelectedProduct[]>([]);
 
   protected readonly productsByCategory = computed(() => {
     const term = this.productSearch().trim().toLowerCase();
@@ -86,7 +104,7 @@ export class OrderEditComponent {
   });
 
   protected readonly subTotalCalc = computed(() =>
-    this.selectedProducts().reduce((sum, p) => sum + Number(p.price ?? 0), 0),
+    this.selectedProducts().reduce((sum, p) => sum + Number(p.product.price ?? 0) * p.quantity, 0),
   );
 
   protected readonly igvCalc = computed(() => this.subTotalCalc() * IGV_RATE);
@@ -116,11 +134,11 @@ export class OrderEditComponent {
     this.$form().controls.total.disable();
 
     if (preselected && !this.$isEdit()) {
-      this.selectedProducts.set([preselected]);
+      this.selectedProducts.set([{ product: preselected, quantity: 1 }]);
       this.$form().patchValue({
         subTotal: Math.round(Number(preselected.price) * 100) / 100,
         total: Math.round(Number(preselected.price) * 1.18 * 100) / 100,
-        detail: preselected.name,
+        detail: '1x ' + preselected.name,
       });
     }
   }
@@ -166,21 +184,43 @@ export class OrderEditComponent {
   }
 
   isProductSelected(product: Product): boolean {
-    return this.selectedProducts().some((p) => p.idProduct === product.idProduct);
+    return this.selectedProducts().some((p) => p.product.idProduct === product.idProduct);
   }
 
-  toggleProduct(product: Product) {
+  getQuantity(product: Product): number {
+    const found = this.selectedProducts().find((p) => p.product.idProduct === product.idProduct);
+    return found ? found.quantity : 0;
+  }
+
+  increaseQuantity(product: Product) {
     const current = this.selectedProducts();
-    if (this.isProductSelected(product)) {
-      this.selectedProducts.set(current.filter((p) => p.idProduct !== product.idProduct));
+    const index = current.findIndex(p => p.product.idProduct === product.idProduct);
+    if (index >= 0) {
+      const updated = [...current];
+      updated[index] = { ...updated[index], quantity: updated[index].quantity + 1 };
+      this.selectedProducts.set(updated);
     } else {
-      this.selectedProducts.set([...current, product]);
+      this.selectedProducts.set([...current, { product, quantity: 1 }]);
+    }
+  }
+
+  decreaseQuantity(product: Product) {
+    const current = this.selectedProducts();
+    const index = current.findIndex(p => p.product.idProduct === product.idProduct);
+    if (index >= 0) {
+      const updated = [...current];
+      if (updated[index].quantity > 1) {
+        updated[index] = { ...updated[index], quantity: updated[index].quantity - 1 };
+        this.selectedProducts.set(updated);
+      } else {
+        this.selectedProducts.set(current.filter(p => p.product.idProduct !== product.idProduct));
+      }
     }
   }
 
   removeProduct(product: Product) {
     this.selectedProducts.set(
-      this.selectedProducts().filter((p) => p.idProduct !== product.idProduct),
+      this.selectedProducts().filter((p) => p.product.idProduct !== product.idProduct),
     );
   }
 
@@ -189,7 +229,7 @@ export class OrderEditComponent {
       subTotal: Math.round(this.subTotalCalc() * 100) / 100,
       total: Math.round(this.totalCalc() * 100) / 100,
       detail: this.selectedProducts()
-        .map((p) => p.name)
+        .map((p) => `${p.quantity}x ${p.product.name}`)
         .join(', '),
     });
     this.closeProductModal();
@@ -203,10 +243,28 @@ export class OrderEditComponent {
     const op$ = isEdit ? this.service.update(id, item) : this.service.save(item);
     op$
       .pipe(
+        // Al crear, registra también los detalles (producto, cantidad, precio) vinculados al pedido
+        switchMap((created: any) => {
+          const idOrder = isEdit ? Number(id) : created?.idOrder;
+          if (!isEdit && idOrder && this.selectedProducts().length) {
+            const details: OrderDetail[] = this.selectedProducts().map((sp) => ({
+              quantity: sp.quantity,
+              unitPrice: Number(sp.product.price ?? 0),
+              notes: '',
+              order: { idOrder },
+              product: sp.product,
+            }));
+            return this.orderDetailService.saveBatch(details).pipe(catchError(() => of(null)));
+          }
+          return of(null);
+        }),
         switchMap(() => this.service.findAll()),
         tap((data) => this.service.setListChange(data)),
         tap(() => this.service.setMessageChange(isEdit ? 'UPDATED' : 'CREATED')),
       )
-      .subscribe(() => this.router.navigate(['/pages/order']));
+      .subscribe({
+        next: () => this.router.navigate(['/pages/order']),
+        error: (err) => window.alert(err?.error?.message ?? 'No se pudo guardar el pedido. Inténtalo de nuevo.'),
+      });
   }
 }

@@ -71,4 +71,15 @@ export class OrderComponent {
       ).subscribe();
     }
   }
+
+  // Cambio rápido de estado (cocina): PENDIENTE → EN_PROCESO → LISTO
+  updateStatus(row: Order, status: string) {
+    if (!row.idOrder) return;
+    this.service.update(row.idOrder, { ...row, status }).pipe(
+      switchMap(() => this.service.findAll()),
+      tap(data => this.service.setListChange(data)),
+      tap(() => this.service.setMessageChange(`PEDIDO #${row.idOrder} → ${status}`)),
+      tap(() => this.pageable.loadServerPage()),
+    ).subscribe();
+  }
 }
