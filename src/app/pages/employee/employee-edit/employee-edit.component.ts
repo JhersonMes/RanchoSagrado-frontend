@@ -5,17 +5,34 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
+import { RoleService } from '../../../services/rol.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Employee } from '../../../model/employee';
 import { switchMap, tap } from 'rxjs';
-import { dniValidator, phoneValidator } from '../../../shared/app-validators';
-import { DniInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
+import { dniValidator, nameValidator, phoneValidator } from '../../../shared/app-validators';
+import { DniInputDirective, NameInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
+
+/** Estados validos para un empleado en el sistema. */
+const EMPLOYEE_STATUSES = ['ACTIVO', 'INACTIVO'] as const;
 
 @Component({
   selector: 'app-employee-edit',
-  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, PhoneInputDirective, DniInputDirective],
+  imports: [
+    FormHeaderComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    RouterLink,
+    PhoneInputDirective,
+    DniInputDirective,
+    NameInputDirective,
+  ],
   templateUrl: './employee-edit.component.html',
   styleUrl: './employee-edit.component.css',
 })
@@ -24,11 +41,21 @@ export class EmployeeEditComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly service = inject(EmployeeService);
+  private readonly roleService = inject(RoleService);
+
+  /** Estados disponibles para el campo Status. */
+  protected readonly statuses = EMPLOYEE_STATUSES;
+
+  /** Roles del sistema cargados desde el API, excluyendo 'ADMIN'. */
+  protected $roles = toSignal(this.roleService.findAll(), { initialValue: [] });
+  protected $jobRoles = computed(() =>
+    this.$roles().filter(r => r.name?.toUpperCase() !== 'ADMIN')
+  );
 
   protected $form = signal(new FormGroup({
     idEmployee: new FormControl<number | null>(null),
-    name: new FormControl<string>('', [Validators.required]),
-    lastName: new FormControl<string>('', [Validators.required]),
+    name: new FormControl<string>('', [Validators.required, nameValidator]),
+    lastName: new FormControl<string>('', [Validators.required, nameValidator]),
     address: new FormControl<string>('', [Validators.required]),
     job: new FormControl<string>('', [Validators.required]),
     phone: new FormControl<string>('', [Validators.required, phoneValidator]),

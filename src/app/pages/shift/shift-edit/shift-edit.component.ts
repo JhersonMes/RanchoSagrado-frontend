@@ -10,10 +10,12 @@ import { ShiftService } from '../../../services/shift.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Shift } from '../../../model/shift';
 import { switchMap, tap } from 'rxjs';
+import { nameValidator } from '../../../shared/app-validators';
+import { NameInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-shift-edit',
-  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, NameInputDirective],
   templateUrl: './shift-edit.component.html',
   styleUrl: './shift-edit.component.css',
 })
@@ -25,7 +27,7 @@ export class ShiftEditComponent {
 
   protected $form = signal(new FormGroup({
     idShift: new FormControl<number | null>(null),
-    name: new FormControl<string>('', [Validators.required]),
+    name: new FormControl<string>('', [Validators.required, nameValidator]),
     startTime: new FormControl<string>('', [Validators.required]),
     endTime: new FormControl<string>('', [Validators.required]),
     daysOfWeek: new FormControl<string>('', [Validators.required]),

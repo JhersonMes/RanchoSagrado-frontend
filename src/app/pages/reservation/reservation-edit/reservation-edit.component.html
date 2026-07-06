@@ -23,12 +23,33 @@
 
     <mat-form-field>
         <mat-label>Reservation Date</mat-label>
-        <input matInput type="datetime-local" formControlName="reservationDate">
+        <input matInput type="datetime-local" formControlName="reservationDate"
+               [min]="minDateTime"
+               max="2099-12-31T23:59">
+        @if ($form().get('reservationDate')?.hasError('pastDate') && $form().get('reservationDate')?.touched) {
+            <mat-error>La fecha de la reserva no puede ser una fecha pasada.</mat-error>
+        }
+        @if ($form().get('reservationDate')?.hasError('yearInvalid') && $form().get('reservationDate')?.touched) {
+            <mat-error>El año debe tener exactamente 4 dígitos.</mat-error>
+        }
+        @if ($form().get('reservationDate')?.hasError('required') && $form().get('reservationDate')?.touched) {
+            <mat-error>La fecha de reservación es requerida.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Number of People</mat-label>
-        <input matInput type="number" placeholder="2" formControlName="numberOfPeople">
+        <mat-label>Número de Personas</mat-label>
+        <input matInput type="number" placeholder="2" formControlName="numberOfPeople" min="1" max="10">
+        <mat-hint>Máximo 10 personas</mat-hint>
+        @if ($form().get('numberOfPeople')?.hasError('required') && $form().get('numberOfPeople')?.touched) {
+            <mat-error>El número de personas es requerido.</mat-error>
+        }
+        @if ($form().get('numberOfPeople')?.hasError('max') && $form().get('numberOfPeople')?.touched) {
+            <mat-error>El máximo permitido es 10 personas.</mat-error>
+        }
+        @if ($form().get('numberOfPeople')?.hasError('min') && $form().get('numberOfPeople')?.touched) {
+            <mat-error>El mínimo es 1 persona.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -36,9 +57,17 @@
         <input matInput placeholder="Birthday, Anniversary..." formControlName="specialOccasion">
     </mat-form-field>
 
+    <!-- Estado de la reserva: selectivo, no editable libremente -->
     <mat-form-field>
-        <mat-label>Status</mat-label>
-        <input matInput placeholder="PENDIENTE / CONFIRMADA / CANCELADA" formControlName="status">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+            @for (s of reservationStatuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
+        @if ($form().get('status')?.hasError('required') && $form().get('status')?.touched) {
+            <mat-error>El estado es requerido.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>

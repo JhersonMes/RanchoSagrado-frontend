@@ -10,8 +10,11 @@
     </div>
 
     <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Role name" formControlName="name">
+        <mat-label>Nombre del Rol</mat-label>
+        <input matInput placeholder="Nombre del Rol" formControlName="name" appNameInput>
+        @if ($form().get('name')?.hasError('nameOnly') && $form().get('name')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>

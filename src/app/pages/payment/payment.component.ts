@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal, untracked, viewChild } from '@angular/core';
 import { Payment } from '../../model/payment';
 import { PaymentService } from '../../services/payment.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -14,6 +14,9 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
 
+// Refresco periodico para reflejar pedidos LISTO recien marcados por cocina.
+const REFRESH_INTERVAL_MS = 8000;
+
 @Component({
   selector: 'app-payment',
   imports: [
@@ -28,6 +31,7 @@ export class PaymentComponent {
 
   private readonly service = inject(PaymentService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected $dataSource = signal(new MatTableDataSource<Payment>());
   protected $sort = viewChild(MatSort);
@@ -41,6 +45,12 @@ export class PaymentComponent {
   constructor() {
     this.service.findAll().subscribe(data => this.service.setListChange(data));
     this.pageable.loadServerPage();
+
+    const intervalId = setInterval(() => {
+      this.service.findAll().subscribe(data => this.service.setListChange(data));
+      this.pageable.loadServerPage();
+    }, REFRESH_INTERVAL_MS);
+    this.destroyRef.onDestroy(() => clearInterval(intervalId));
 
     effect(() => {
       const ds = this.$dataSource();

@@ -12,10 +12,17 @@ import { OrderService } from '../../../services/order.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PaymentReceipt } from '../../../model/paymentreceipt';
 import { switchMap, tap } from 'rxjs';
+import { rucValidator } from '../../../shared/app-validators';
+import { RucInputDirective } from '../../../shared/phone-dni-input.directive';
+
+/** Valores validos de sistema para el comprobante de pago. */
+const RECEIPT_TYPES = ['BOLETA', 'FACTURA'] as const;
+const RECEIPT_STATUSES = ['EMITIDO', 'ANULADO'] as const;
+const RECEIPT_PAYMENT_METHODS = ['EFECTIVO', 'TARJETA', 'YAPE', 'PLIN'] as const;
 
 @Component({
   selector: 'app-payment-receipt-edit',
-  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatSelectModule],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatSelectModule, RucInputDirective],
   templateUrl: './payment-receipt-edit.component.html',
   styleUrl: './payment-receipt-edit.component.css',
 })
@@ -25,6 +32,10 @@ export class PaymentReceiptEditComponent {
   private readonly router = inject(Router);
   private readonly service = inject(PaymentReceiptService);
   protected readonly orderService = inject(OrderService);
+
+  protected readonly receiptTypes = RECEIPT_TYPES;
+  protected readonly receiptStatuses = RECEIPT_STATUSES;
+  protected readonly paymentMethods = RECEIPT_PAYMENT_METHODS;
 
   protected $form = signal(new FormGroup({
     idReceipt: new FormControl<number | null>(null),
@@ -39,7 +50,7 @@ export class PaymentReceiptEditComponent {
     status: new FormControl<string>('EMITIDO', [Validators.required]),
     paymentMethod: new FormControl<string>('', [Validators.required]),
     businessName: new FormControl<string>(''),
-    ruc: new FormControl<string>(''),
+    ruc: new FormControl<string>('', [rucValidator]),
     fiscalAddress: new FormControl<string>(''),
   }));
 

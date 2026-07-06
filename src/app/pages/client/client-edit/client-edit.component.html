@@ -15,13 +15,19 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Name" formControlName="name">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre" formControlName="name" appNameInput>
+        @if ($form().get('name')?.hasError('nameOnly') && $form().get('name')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Last Name" formControlName="lastName">
+        <mat-label>Apellido</mat-label>
+        <input matInput placeholder="Apellido" formControlName="lastName" appNameInput>
+        @if ($form().get('lastName')?.hasError('nameOnly') && $form().get('lastName')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -35,8 +41,12 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Birth Date</mat-label>
-        <input matInput placeholder="Birth Date" formControlName="birthDate" type="date">
+        <mat-label>Fecha de Nacimiento</mat-label>
+        <input matInput placeholder="Fecha de Nacimiento" formControlName="birthDate" type="date"
+               min="1900-01-01" max="2099-12-31">
+        @if ($form().get('birthDate')?.hasError('yearInvalid') && $form().get('birthDate')?.touched) {
+            <mat-error>El año debe tener exactamente 4 dígitos.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -46,7 +56,10 @@
 
     <mat-form-field>
         <mat-label>RUC</mat-label>
-        <input matInput placeholder="RUC" formControlName="ruc">
+        <input matInput placeholder="RUC" formControlName="ruc" appRucInput>
+        @if ($form().get('ruc')?.hasError('ruc') && $form().get('ruc')?.touched) {
+            <mat-error>El RUC debe tener 11 dígitos y un prefijo válido (10, 15, 17 o 20).</mat-error>
+        }
     </mat-form-field>
 
     <div class="form-actions">

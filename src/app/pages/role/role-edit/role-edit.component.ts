@@ -10,6 +10,8 @@ import { RoleService } from '../../../services/rol.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Role } from '../../../model/role';
 import { switchMap, tap } from 'rxjs';
+import { nameValidator } from '../../../shared/app-validators';
+import { NameInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-role-edit',
@@ -19,7 +21,8 @@ import { switchMap, tap } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink
+    RouterLink,
+    NameInputDirective
   ],
   templateUrl: './role-edit.component.html',
   styleUrl: './role-edit.component.css',
@@ -32,7 +35,7 @@ export class RoleEditComponent {
 
   protected $form = signal(new FormGroup({
     idRole: new FormControl<number | null>(null),
-    name: new FormControl<string>('', [Validators.required]),
+    name: new FormControl<string>('', [Validators.required, nameValidator]),
     description: new FormControl<string>(''),
   }));
 

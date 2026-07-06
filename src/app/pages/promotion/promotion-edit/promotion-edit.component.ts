@@ -11,10 +11,12 @@ import { PromotionService } from '../../../services/promotion.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Promotion } from '../../../model/promotion';
 import { switchMap, tap } from 'rxjs';
+import { dateYear4DigitsValidator, nameValidator } from '../../../shared/app-validators';
+import { NameInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-promotion-edit',
-  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatCheckboxModule],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink, MatCheckboxModule, NameInputDirective],
   templateUrl: './promotion-edit.component.html',
   styleUrl: './promotion-edit.component.css',
 })
@@ -26,11 +28,11 @@ export class PromotionEditComponent {
 
   protected $form = signal(new FormGroup({
     idPromotion: new FormControl<number | null>(null),
-    name: new FormControl<string>('', [Validators.required]),
+    name: new FormControl<string>('', [Validators.required, nameValidator]),
     description: new FormControl<string>(''),
     discountPercentage: new FormControl<number | null>(null, [Validators.required]),
-    startDate: new FormControl<string>('', [Validators.required]),
-    endDate: new FormControl<string>('', [Validators.required]),
+    startDate: new FormControl<string>('', [Validators.required, dateYear4DigitsValidator]),
+    endDate: new FormControl<string>('', [Validators.required, dateYear4DigitsValidator]),
     status: new FormControl<boolean>(true),
   }));
 

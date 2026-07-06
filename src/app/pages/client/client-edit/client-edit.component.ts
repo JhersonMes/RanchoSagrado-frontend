@@ -10,8 +10,8 @@ import { ClientService } from '../../../services/client.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Client } from '../../../model/client';
 import { switchMap, tap } from 'rxjs';
-import { dniValidator, phoneValidator } from '../../../shared/app-validators';
-import { DniInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
+import { dniValidator, nameValidator, phoneValidator, dateYear4DigitsValidator, rucValidator } from '../../../shared/app-validators';
+import { DniInputDirective, NameInputDirective, PhoneInputDirective, RucInputDirective } from '../../../shared/phone-dni-input.directive';
 
 @Component({
   selector: 'app-client-edit',
@@ -23,7 +23,9 @@ import { DniInputDirective, PhoneInputDirective } from '../../../shared/phone-dn
     MatIconModule,
     RouterLink,
     PhoneInputDirective,
-    DniInputDirective
+    DniInputDirective,
+    NameInputDirective,
+    RucInputDirective
   ],
   templateUrl: './client-edit.component.html',
   styleUrl: './client-edit.component.css',
@@ -37,13 +39,13 @@ export class ClientEditComponent {
   protected $form = signal(new FormGroup({
     idClient: new FormControl<number | null>(null),
     dni: new FormControl<number | null>(null, [dniValidator]),
-    name: new FormControl<string>(''),
-    lastName: new FormControl<string>(''),
+    name: new FormControl<string>('', [nameValidator]),
+    lastName: new FormControl<string>('', [nameValidator]),
     phone: new FormControl<string>('', [phoneValidator]),
     email: new FormControl<string>(''),
-    birthDate: new FormControl<Date | string | null>(null),
+    birthDate: new FormControl<Date | string | null>(null, [dateYear4DigitsValidator]),
     address: new FormControl<string>(''),
-    ruc: new FormControl<string>(''),
+    ruc: new FormControl<string>('', [rucValidator]),
   }));
 
   private readonly $params = toSignal(this.route.params, { initialValue: {} });

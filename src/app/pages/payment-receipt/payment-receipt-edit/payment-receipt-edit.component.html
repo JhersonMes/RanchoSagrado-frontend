@@ -14,7 +14,11 @@
 
     <mat-form-field>
         <mat-label>Tipo de Comprobante</mat-label>
-        <input matInput placeholder="BOLETA / FACTURA" formControlName="receiptType">
+        <mat-select formControlName="receiptType">
+            @for (t of receiptTypes; track t) {
+                <mat-option [value]="t">{{ t }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <mat-form-field>
@@ -49,12 +53,20 @@
 
     <mat-form-field>
         <mat-label>Método de Pago</mat-label>
-        <input matInput placeholder="EFECTIVO / TARJETA / TRANSFERENCIA" formControlName="paymentMethod">
+        <mat-select formControlName="paymentMethod">
+            @for (m of paymentMethods; track m) {
+                <mat-option [value]="m">{{ m }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <mat-form-field>
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="EMITIDO / ANULADO" formControlName="status">
+        <mat-select formControlName="status">
+            @for (s of receiptStatuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <mat-form-field>
@@ -64,7 +76,10 @@
 
     <mat-form-field>
         <mat-label>RUC</mat-label>
-        <input matInput formControlName="ruc">
+        <input matInput formControlName="ruc" appRucInput>
+        @if ($form().get('ruc')?.hasError('ruc') && $form().get('ruc')?.touched) {
+            <mat-error>El RUC debe tener 11 dígitos y un prefijo válido (10, 15, 17 o 20).</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>

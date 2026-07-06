@@ -13,6 +13,7 @@ import { RestaurantTableService } from '../../../services/restauranttable.servic
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Reservation } from '../../../model/reservation';
 import { switchMap, tap } from 'rxjs';
+import { dateYear4DigitsValidator, notPastDateValidator } from '../../../shared/app-validators';
 
 @Component({
   selector: 'app-reservation-edit',
@@ -28,10 +29,21 @@ export class ReservationEditComponent {
   protected readonly clientService = inject(ClientService);
   protected readonly tableService = inject(RestaurantTableService);
 
+  /** Estados validos para una reservacion en el sistema. */
+  protected readonly reservationStatuses = ['PENDIENTE', 'CONFIRMADA', 'CANCELADA'] as const;
+
+  /** Fecha/hora minima permitida (ahora mismo) en formato datetime-local para el atributo min del input. */
+  protected get minDateTime(): string {
+    const now = new Date();
+    // Ajuste de zona local → formato 'YYYY-MM-DDThh:mm'
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  }
+
   protected $form = signal(new FormGroup({
     idReservation: new FormControl<number | null>(null),
-    reservationDate: new FormControl<string>('', [Validators.required]),
-    numberOfPeople: new FormControl<number | null>(null, [Validators.required]),
+    reservationDate: new FormControl<string>('', [Validators.required, dateYear4DigitsValidator, notPastDateValidator]),
+    numberOfPeople: new FormControl<number | null>(null, [Validators.required, Validators.min(1), Validators.max(10)]),
     specialOccasion: new FormControl<string>(''),
     status: new FormControl<string>('PENDIENTE', [Validators.required]),
     notes: new FormControl<string>(''),

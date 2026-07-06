@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal, untracked, viewChild } from '@angular/core';
 import { Order } from '../../model/order';
 import { OrderService } from '../../services/order.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -14,6 +14,10 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
 
+// Refresco periodico para que los cambios de estado hechos por otro rol
+// (mesero crea, cocina prepara, cajero cobra) se reflejen sin recargar la pagina.
+const REFRESH_INTERVAL_MS = 8000;
+
 @Component({
   selector: 'app-order',
   imports: [
@@ -28,6 +32,7 @@ export class OrderComponent {
 
   private readonly service = inject(OrderService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected $dataSource = signal(new MatTableDataSource<Order>());
   protected $sort = viewChild(MatSort);
@@ -41,6 +46,13 @@ export class OrderComponent {
   constructor() {
     this.service.findAll().subscribe(data => this.service.setListChange(data));
     this.pageable.loadServerPage();
+
+    // Mantiene la lista al dia si otro rol (cocina, cajero) cambia el estado de un pedido.
+    const intervalId = setInterval(() => {
+      this.service.findAll().subscribe(data => this.service.setListChange(data));
+      this.pageable.loadServerPage();
+    }, REFRESH_INTERVAL_MS);
+    this.destroyRef.onDestroy(() => clearInterval(intervalId));
 
     effect(() => {
       const ds = this.$dataSource();

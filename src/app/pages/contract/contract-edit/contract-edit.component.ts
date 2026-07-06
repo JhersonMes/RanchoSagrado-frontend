@@ -13,6 +13,7 @@ import { SupplierService } from '../../../services/supplier.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Contract } from '../../../model/contract';
 import { switchMap, tap } from 'rxjs';
+import { dateYear4DigitsValidator } from '../../../shared/app-validators';
 
 @Component({
   selector: 'app-contract-edit',
@@ -30,8 +31,8 @@ export class ContractEditComponent {
 
   protected $form = signal(new FormGroup({
     idContract: new FormControl<number | null>(null),
-    startDate: new FormControl<string>('', [Validators.required]),
-    endDate: new FormControl<string>(''),
+    startDate: new FormControl<string>('', [Validators.required, dateYear4DigitsValidator]),
+    endDate: new FormControl<string>('', [dateYear4DigitsValidator]),
     contractType: new FormControl<string>('', [Validators.required]),
     salary: new FormControl<number | null>(null, [Validators.required]),
     clause: new FormControl<string>(''),

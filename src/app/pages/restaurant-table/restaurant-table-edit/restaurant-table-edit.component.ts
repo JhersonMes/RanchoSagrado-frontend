@@ -5,15 +5,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RestaurantTableService } from '../../../services/restauranttable.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RestaurantTable } from '../../../model/restauranttable';
 import { switchMap, tap } from 'rxjs';
 
+/** Estados validos para una mesa en el sistema. */
+const TABLE_STATUSES = ['DISPONIBLE', 'OCUPADA', 'RESERVADA'] as const;
+
 @Component({
   selector: 'app-restaurant-table-edit',
-  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [FormHeaderComponent, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './restaurant-table-edit.component.html',
   styleUrl: './restaurant-table-edit.component.css',
 })
@@ -22,6 +26,9 @@ export class RestaurantTableEditComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly service = inject(RestaurantTableService);
+
+  /** Estados disponibles para el campo Status. */
+  protected readonly statuses = TABLE_STATUSES;
 
   protected $form = signal(new FormGroup({
     idTable: new FormControl<number | null>(null),

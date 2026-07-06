@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, DestroyRef, computed, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -30,6 +30,9 @@ function isSameDay(dateStr: string, reference: Date): boolean {
 
 const DAY_LABELS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
+// Refresco periodico para reflejar pedidos que cocina marca LISTO desde otra sesion.
+const REFRESH_INTERVAL_MS = 8000;
+
 @Component({
   selector: 'app-cajero-dashboard',
   standalone: true,
@@ -40,6 +43,7 @@ export class CajeroDashboardComponent {
   private readonly authService = inject(AuthService);
   private readonly orderService = inject(OrderService);
   private readonly paymentService = inject(PaymentService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly currentUser = this.authService.currentUser;
   readonly userName = computed(() => this.currentUser()?.username ?? 'Cajero');
@@ -130,5 +134,11 @@ export class CajeroDashboardComponent {
 
     this.orderService.findAll().subscribe((data) => this.orderService.setListChange(data));
     this.paymentService.findAll().subscribe((data) => this.paymentService.setListChange(data));
+
+    const intervalId = setInterval(() => {
+      this.orderService.findAll().subscribe((data) => this.orderService.setListChange(data));
+      this.paymentService.findAll().subscribe((data) => this.paymentService.setListChange(data));
+    }, REFRESH_INTERVAL_MS);
+    this.destroyRef.onDestroy(() => clearInterval(intervalId));
   }
 }

@@ -20,7 +20,11 @@
 
     <mat-form-field>
         <mat-label>Status</mat-label>
-        <input matInput placeholder="DISPONIBLE / OCUPADA..." formControlName="status">
+        <mat-select formControlName="status">
+            @for (s of statuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <div class="form-actions">

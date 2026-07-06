@@ -4,8 +4,11 @@
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idPromotion"></mat-form-field></div>
 
     <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Promotion name" formControlName="name">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre de la Promoción" formControlName="name" appNameInput>
+        @if ($form().get('name')?.hasError('nameOnly') && $form().get('name')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -19,13 +22,19 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Start Date</mat-label>
-        <input matInput type="date" formControlName="startDate">
+        <mat-label>Fecha Inicio</mat-label>
+        <input matInput type="date" formControlName="startDate" min="2000-01-01" max="2099-12-31">
+        @if ($form().get('startDate')?.hasError('yearInvalid') && $form().get('startDate')?.touched) {
+            <mat-error>El año debe tener exactamente 4 dígitos.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>End Date</mat-label>
-        <input matInput type="date" formControlName="endDate">
+        <mat-label>Fecha Fin</mat-label>
+        <input matInput type="date" formControlName="endDate" min="2000-01-01" max="2099-12-31">
+        @if ($form().get('endDate')?.hasError('yearInvalid') && $form().get('endDate')?.touched) {
+            <mat-error>El año debe tener exactamente 4 dígitos.</mat-error>
+        }
     </mat-form-field>
 
     <mat-checkbox formControlName="status">Active</mat-checkbox>

@@ -4,8 +4,11 @@
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idShift"></mat-form-field></div>
 
     <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Shift name" formControlName="name">
+        <mat-label>Nombre del Turno</mat-label>
+        <input matInput placeholder="Nombre del Turno" formControlName="name" appNameInput>
+        @if ($form().get('name')?.hasError('nameOnly') && $form().get('name')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>

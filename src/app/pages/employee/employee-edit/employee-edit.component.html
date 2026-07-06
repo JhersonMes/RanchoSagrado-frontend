@@ -3,39 +3,89 @@
 
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idEmployee"></mat-form-field></div>
 
+    <!-- Nombre -->
     <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Name" formControlName="name">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Solo letras" formControlName="name" appNameInput>
+        @if ($form().get('name')?.hasError('required') && $form().get('name')?.touched) {
+            <mat-error>El nombre es requerido.</mat-error>
+        }
+        @if ($form().get('name')?.hasError('nameOnly') && $form().get('name')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- Apellido -->
     <mat-form-field>
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Last Name" formControlName="lastName">
+        <mat-label>Apellido</mat-label>
+        <input matInput placeholder="Solo letras" formControlName="lastName" appNameInput>
+        @if ($form().get('lastName')?.hasError('required') && $form().get('lastName')?.touched) {
+            <mat-error>El apellido es requerido.</mat-error>
+        }
+        @if ($form().get('lastName')?.hasError('nameOnly') && $form().get('lastName')?.touched) {
+            <mat-error>Solo se permiten letras y espacios.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- DNI -->
     <mat-form-field>
         <mat-label>DNI</mat-label>
-        <input matInput placeholder="DNI" formControlName="dni" appDniInput>
+        <input matInput placeholder="Ej: 12345678" formControlName="dni" appDniInput maxlength="8">
+        <mat-hint>8 dígitos, no empieza en 0</mat-hint>
+        @if ($form().get('dni')?.hasError('required') && $form().get('dni')?.touched) {
+            <mat-error>El DNI es requerido.</mat-error>
+        }
+        @if ($form().get('dni')?.hasError('dni') && $form().get('dni')?.touched) {
+            <mat-error>DNI inválido: 8 dígitos, primer dígito del 1 al 9.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- Job / Position (select con roles del sistema, sin ADMIN) -->
     <mat-form-field>
-        <mat-label>Job / Position</mat-label>
-        <input matInput placeholder="Job" formControlName="job">
+        <mat-label>Cargo / Puesto</mat-label>
+        <mat-select formControlName="job">
+            @for (role of $jobRoles(); track role.idRole) {
+                <mat-option [value]="role.name">{{ role.name }}</mat-option>
+            }
+        </mat-select>
+        @if ($form().get('job')?.hasError('required') && $form().get('job')?.touched) {
+            <mat-error>El cargo es requerido.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- Teléfono -->
     <mat-form-field>
-        <mat-label>Phone</mat-label>
-        <input matInput placeholder="Phone" formControlName="phone" appPhoneInput>
+        <mat-label>Teléfono</mat-label>
+        <input matInput placeholder="Ej: 987654321" formControlName="phone" appPhoneInput maxlength="9">
+        <mat-hint>9 dígitos, empieza siempre con 9</mat-hint>
+        @if ($form().get('phone')?.hasError('required') && $form().get('phone')?.touched) {
+            <mat-error>El teléfono es requerido.</mat-error>
+        }
+        @if ($form().get('phone')?.hasError('phone') && $form().get('phone')?.touched) {
+            <mat-error>Teléfono inválido: 9 dígitos, debe iniciar con 9.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- Dirección -->
     <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input matInput placeholder="Address" formControlName="address">
+        <mat-label>Dirección</mat-label>
+        <input matInput placeholder="Dirección" formControlName="address">
+        @if ($form().get('address')?.hasError('required') && $form().get('address')?.touched) {
+            <mat-error>La dirección es requerida.</mat-error>
+        }
     </mat-form-field>
 
+    <!-- Estado (select: ACTIVO / INACTIVO) -->
     <mat-form-field>
-        <mat-label>Status</mat-label>
-        <input matInput placeholder="ACTIVO / INACTIVO" formControlName="status">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+            @for (s of statuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
+        @if ($form().get('status')?.hasError('required') && $form().get('status')?.touched) {
+            <mat-error>El estado es requerido.</mat-error>
+        }
     </mat-form-field>
 
     <div class="form-actions">

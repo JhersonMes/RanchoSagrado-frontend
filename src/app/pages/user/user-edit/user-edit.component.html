@@ -17,6 +17,22 @@
     <mat-form-field>
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" required>
+        @if ($form().get('email')?.hasError('email') && $form().get('email')?.touched) {
+            <mat-error>Ingresa un email válido.</mat-error>
+        }
+    </mat-form-field>
+
+    <!-- Rol del usuario — requerido para que id_role no sea null en la BD -->
+    <mat-form-field>
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="role" [compareWith]="compareRole">
+            @for (r of $roles(); track r.idRole) {
+                <mat-option [value]="r">{{ r.name }}</mat-option>
+            }
+        </mat-select>
+        @if ($form().get('role')?.hasError('required') && $form().get('role')?.touched) {
+            <mat-error>El rol es requerido.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -27,6 +43,7 @@
     <div class="checkbox-container">
         <mat-checkbox formControlName="enabled">User Enabled</mat-checkbox>
     </div>
+
 
     <div class="form-actions">
     <button mat-flat-button color="primary" type="submit" [disabled]="$form().invalid">

@@ -16,7 +16,10 @@
 
     <mat-form-field>
         <mat-label>RUC</mat-label>
-        <input matInput placeholder="RUC" formControlName="ruc">
+        <input matInput placeholder="RUC" formControlName="ruc" appRucInput>
+        @if ($form().get('ruc')?.hasError('ruc') && $form().get('ruc')?.touched) {
+            <mat-error>El RUC debe tener 11 dígitos y un prefijo válido (10, 15, 17 o 20).</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field>
@@ -41,7 +44,11 @@
 
     <mat-form-field>
         <mat-label>Status</mat-label>
-        <input matInput placeholder="Status" formControlName="status">
+        <mat-select formControlName="status">
+            @for (s of statuses; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <div class="form-actions">
