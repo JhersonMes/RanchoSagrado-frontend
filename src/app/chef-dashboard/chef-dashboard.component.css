@@ -1,0 +1,436 @@
+/* =========================================================
+   Chef Dashboard — premium dark-orange theme
+   ========================================================= */
+
+/* Layout */
+.chef-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.chef-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chef-main {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 50%, #ffffff 100%);
+}
+
+/* ---- Hero header ---- */
+.chef-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(135deg, #030303, #030303);
+  border: 1px solid rgba(251, 146, 60, 0.25);
+  border-radius: 1.25rem;
+  box-shadow: 0 0 40px rgba(251, 146, 60, 0.08);
+}
+
+.chef-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.chef-hero-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+  flex-shrink: 0;
+}
+
+.chef-hero-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #fff;
+}
+
+.chef-hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0 0 0.2rem;
+  letter-spacing: -0.03em;
+}
+
+.chef-hero-sub {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.chef-hero-sub strong {
+  color: #f97316;
+}
+
+/* Pending badge */
+.chef-hero-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #0a131f, #0a131f);
+  border: 1.5px solid rgba(20, 25, 31, 0.3);
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.1);
+  transition: all 0.3s;
+}
+
+.chef-hero-badge.badge-urgent {
+  background: linear-gradient(135deg, #0b0303, #0a131f);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+  animation: pulse-badge 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.badge-count {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.badge-urgent .badge-count {
+  color: #fca5a5;
+}
+
+.badge-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+}
+
+/* ---- Empty state ---- */
+.chef-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+  animation: fadeInUp 0.5s ease;
+}
+
+.chef-empty-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+}
+
+.chef-empty-icon svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #4ade80;
+}
+
+.chef-empty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 0.5rem;
+}
+
+.chef-empty-sub {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ---- Cards grid ---- */
+.chef-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  animation: fadeInUp 0.4s ease;
+}
+
+/* ---- Order card ---- */
+.order-card {
+  background: linear-gradient(160deg, #0c111a 0%, #0c111a 100%);
+  border: 1px solid rgba(17, 28, 43, 0.12);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  animation: fadeInUp 0.4s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+.order-card-urgent {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+  animation: fadeInUp 0.4s ease, pulse-card 2s ease-in-out infinite;
+}
+
+@keyframes pulse-card {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+  }
+}
+
+/* Card header */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.card-table-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f97316;
+  letter-spacing: -0.01em;
+}
+
+.card-table-badge svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.card-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.card-timer svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.card-timer.timer-urgent {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.urgent-pill {
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: blink 0.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Card body */
+.card-body {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.card-client {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.card-client svg {
+  width: 1rem;
+  height: 1rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.card-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid rgba(249, 115, 22, 0.4);
+}
+
+.card-detail svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #f97316;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.card-total {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: right;
+}
+
+.card-total strong {
+  color: #a3e635;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* Card actions */
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.btn-listo,
+.btn-cancelado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.btn-listo svg,
+.btn-cancelado svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.btn-listo {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border-right: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.btn-listo:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.25);
+  color: #86efac;
+}
+
+.btn-cancelado {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.btn-cancelado:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+
+.btn-listo:disabled,
+.btn-cancelado:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

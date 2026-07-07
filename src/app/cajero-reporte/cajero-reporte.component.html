@@ -1,0 +1,140 @@
+<div class="min-h-screen flex bg-slate-50">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+    <app-header title="Reporte de Cobros"></app-header>
+
+    <main class="flex-1 px-8 py-6">
+
+      <!-- Título y filtro de fecha -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl font-extrabold text-slate-800">Reporte de Cobros</h1>
+          <p class="text-slate-500 mt-1 capitalize">{{ labelFecha() }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            (click)="setHoy()"
+            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+          >Hoy</button>
+          <input
+            type="date"
+            [value]="fechaFiltro()"
+            (change)="setFecha($any($event.target).value)"
+            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all"
+          />
+        </div>
+      </div>
+
+      <!-- Tarjetas de resumen -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Total Cobrado</p>
+          <p class="text-2xl font-extrabold text-slate-800">{{ totalCobrado() | currency:'USD':'symbol':'1.2-2' }}</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Mesas Atendidas</p>
+          <p class="text-2xl font-extrabold text-slate-800">{{ cantidadMesas() }}</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="h-2.5 w-2.5 rounded-full bg-green-500 inline-block"></span>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Efectivo</p>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800">{{ totalEfectivo() | currency:'USD':'symbol':'1.2-2' }}</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="h-2.5 w-2.5 rounded-full bg-blue-500 inline-block"></span>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Tarjeta</p>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-800">{{ totalTarjeta() | currency:'USD':'symbol':'1.2-2' }}</p>
+        </div>
+      </div>
+
+      <!-- Tabla de cobros -->
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <p class="font-semibold text-slate-800">Detalle de Cobros</p>
+          <span class="text-xs font-medium text-slate-400">{{ cobrosDelDia().length }} registros</span>
+        </div>
+
+        @if (cobrosDelDia().length) {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <th class="text-left px-6 py-3">#</th>
+                  <th class="text-left px-6 py-3">Mesa</th>
+                  <th class="text-left px-6 py-3">Cliente</th>
+                  <th class="text-left px-6 py-3">Pedido</th>
+                  <th class="text-left px-6 py-3">Hora</th>
+                  <th class="text-left px-6 py-3">Método</th>
+                  <th class="text-right px-6 py-3">Monto</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-50">
+                @for (cobro of cobrosDelDia(); track cobro.idPayment; let i = $index) {
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-3.5 text-slate-400 font-mono text-xs">{{ i + 1 }}</td>
+                    <td class="px-6 py-3.5">
+                      <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-amber-100 text-amber-700 font-bold text-xs">
+                          {{ cobro.mesa }}
+                        </span>
+                        <span class="font-semibold text-slate-800">Mesa {{ cobro.mesa }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-3.5 text-slate-600">{{ cobro.cliente }}</td>
+                    <td class="px-6 py-3.5 text-slate-400">#{{ cobro.pedidoId }}</td>
+                    <td class="px-6 py-3.5 text-slate-600">{{ cobro.hora }}</td>
+                    <td class="px-6 py-3.5">
+                      <span
+                        class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                        [class]="cobro.metodo === 'EFECTIVO'
+                          ? 'bg-green-50 text-green-700'
+                          : 'bg-blue-50 text-blue-700'"
+                      >
+                        <span
+                          class="h-1.5 w-1.5 rounded-full inline-block"
+                          [class]="cobro.metodo === 'EFECTIVO' ? 'bg-green-500' : 'bg-blue-500'"
+                        ></span>
+                        {{ cobro.metodo }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-3.5 text-right font-bold text-slate-800">
+                      {{ cobro.monto | currency:'USD':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr class="bg-slate-50 border-t-2 border-slate-200">
+                  <td colspan="6" class="px-6 py-3.5 font-bold text-slate-700 text-sm">Total</td>
+                  <td class="px-6 py-3.5 text-right font-extrabold text-red-700 text-base">
+                    {{ totalCobrado() | currency:'USD':'symbol':'1.2-2' }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        } @else {
+          <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+            <svg class="h-14 w-14 mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            <p class="text-base font-semibold text-slate-500">Sin cobros para esta fecha</p>
+            <p class="text-sm mt-1">No se registraron pagos el {{ labelFecha() }}.</p>
+            <button
+              (click)="setHoy()"
+              class="mt-4 rounded-lg bg-red-700 px-5 py-2 text-sm font-semibold text-white hover:bg-red-800 transition-colors"
+            >Ver cobros de hoy</button>
+          </div>
+        }
+      </div>
+
+    </main>
+  </div>
+
+</div>

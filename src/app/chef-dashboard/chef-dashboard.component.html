@@ -1,0 +1,128 @@
+<div class="chef-layout">
+  <app-sidebar />
+
+  <div class="chef-content">
+    <app-header />
+
+    <main class="chef-main">
+
+      <!-- Header Section -->
+      <div class="chef-hero">
+        <div class="chef-hero-left">
+          <div class="chef-hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 6v6l4 2M12 3a9 9 0 100 18A9 9 0 0012 3z" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="chef-hero-title">Panel del Chef</h1>
+            <p class="chef-hero-sub">Bienvenido, <strong>{{ userName() }}</strong> — Pedidos pendientes de preparación</p>
+          </div>
+        </div>
+        <div class="chef-hero-badge" [class.badge-urgent]="totalPendiente() > 5">
+          <span class="badge-count">{{ totalPendiente() }}</span>
+          <span class="badge-label">{{ totalPendiente() === 1 ? 'pendiente' : 'pendientes' }}</span>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      @if (pendingOrders().length === 0) {
+        <div class="chef-empty">
+          <div class="chef-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 class="chef-empty-title">¡Todo listo!</h2>
+          <p class="chef-empty-sub">No hay pedidos pendientes en este momento.</p>
+        </div>
+      }
+
+      <!-- Orders grid -->
+      @if (pendingOrders().length > 0) {
+        <div class="chef-grid">
+          @for (card of pendingOrders(); track card.order.idOrder) {
+            <div class="order-card" [class.order-card-urgent]="card.urgent">
+
+              <!-- Card top bar -->
+              <div class="card-header">
+                <div class="card-table-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.75 9h16.5M3.75 9v8.25A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V9" />
+                  </svg>
+                  {{ tableLabel(card.order) }}
+                </div>
+                <div class="card-timer" [class.timer-urgent]="card.urgent">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 6v6l4 2M12 3a9 9 0 100 18A9 9 0 0012 3z" />
+                  </svg>
+                  {{ card.timeAgo }}
+                  @if (card.urgent) { <span class="urgent-pill">¡Urgente!</span> }
+                </div>
+              </div>
+
+              <!-- Card body -->
+              <div class="card-body">
+                <div class="card-client">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" />
+                  </svg>
+                  {{ clientLabel(card.order) }}
+                </div>
+
+                @if (card.order.detail) {
+                  <div class="card-detail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12h3.75M9 15h3.75M9 18h3.75M3.75 6.75h16.5M3.75 6.75v10.5A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V6.75M3.75 6.75L6 3.75h12l2.25 3" />
+                    </svg>
+                    <span>{{ card.order.detail }}</span>
+                  </div>
+                }
+
+                <div class="card-total">
+                  Total: <strong>S/ {{ card.order.total | number:'1.2-2' }}</strong>
+                </div>
+              </div>
+
+              <!-- Card actions -->
+              <div class="card-actions">
+                <button
+                  class="btn-listo"
+                  [disabled]="isProcessing(card.order.idOrder!)"
+                  (click)="markListo(card.order)"
+                >
+                  @if (isProcessing(card.order.idOrder!)) {
+                    <span class="spinner"></span>
+                  } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  }
+                  Listo
+                </button>
+                <button
+                  class="btn-cancelado"
+                  [disabled]="isProcessing(card.order.idOrder!)"
+                  (click)="markCancelado(card.order)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Cancelar
+                </button>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+
+    </main>
+  </div>
+</div>
