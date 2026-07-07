@@ -20,10 +20,24 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'cajero/reporte',
+    loadComponent: () =>
+      import('./cajero-reporte/cajero-reporte.component').then(
+        (m) => m.CajeroReporteComponent,
+      ),
+  },
+  {
     path: 'cliente/dashboard',
     loadComponent: () =>
       import('./cliente-dashboard/cliente-dashboard.component').then(
         (m) => m.ClienteDashboardComponent,
+      ),
+  },
+  {
+    path: 'chef/dashboard',
+    loadComponent: () =>
+      import('./chef-dashboard/chef-dashboard.component').then(
+        (m) => m.ChefDashboardComponent,
       ),
   },
   {

@@ -32,7 +32,7 @@
         <mat-label><mat-icon class="field-icon">table_restaurant</mat-icon> Mesa (opcional)</mat-label>
         <mat-select formControlName="restaurantTable" [compareWith]="compareFnTable">
             <mat-option [value]="null">-- Ninguna --</mat-option>
-            @for (t of tableService.$listChange(); track t.idTable) {
+            @for (t of availableTables(); track t.idTable) {
                 <mat-option [value]="t">Mesa #{{t.tableNumber}}</mat-option>
             }
         </mat-select>

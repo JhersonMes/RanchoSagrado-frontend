@@ -11,10 +11,6 @@
       <h1 class="page-title">Lista de Mesas</h1>
       <p class="page-subtitle">Administra las mesas registradas.</p>
     </div>
-    <button class="btn-primary" routerLink="/pages/restaurant-table/new">
-      <mat-icon>add</mat-icon>
-      Nueva Mesa
-    </button>
   </div>
 
   <div class="search-box">
@@ -22,7 +18,45 @@
     <input (keyup)="applyFilter($event)" placeholder="Buscar por número, ubicación..." #input>
   </div>
 
-  <div class="table-card">
+  @if (isGridMode()) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+    @for (item of tablesWithStatus(); track item.table.idTable) {
+    <div class="mesa-card" [class.ocupada]="item.isOccupied" (click)="handleTableClick(item)">
+      <div class="mesa-header">
+        <span class="mesa-number">Mesa {{ item.table.tableNumber }}</span>
+        <span class="mesa-capacity">
+          <mat-icon>group</mat-icon> {{ item.table.capacity }}
+        </span>
+      </div>
+
+      <div class="mesa-body">
+        @if (item.isOccupied) {
+        <div class="mesa-status bg-amber-50 text-amber-700 border-amber-200">
+          <span class="status-dot bg-amber-500 animate-pulse"></span>
+          OCUPADA
+        </div>
+        <div class="mesa-order-info mt-3 text-sm text-slate-600">
+          <p><strong>Pedido:</strong> #{{ item.activeOrder?.idOrder }}</p>
+          <p><strong>Cliente:</strong> {{ item.activeOrder?.client?.name ?? 'Sin cliente' }}</p>
+          <p><strong>Estado:</strong> {{ item.activeOrder?.status }}</p>
+        </div>
+        } @else {
+        <div class="mesa-status bg-green-50 text-green-700 border-green-200">
+          <span class="status-dot bg-green-500"></span>
+          DISPONIBLE
+        </div>
+        <p class="text-sm text-slate-400 mt-4 text-center italic">Lista para un nuevo pedido</p>
+        }
+      </div>
+
+      <div class="mesa-footer">
+        <span class="mesa-location">{{ item.table.location ?? 'Salón Principal' }}</span>
+      </div>
+    </div>
+    }
+  </div>
+  } @else {
+  <div class="table-card mt-4">
     <div class="table-scroll">
       <table mat-table [dataSource]="$dataSource()" matSort>
         <ng-container matColumnDef="idTable">
@@ -49,21 +83,18 @@
           <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
           <td mat-cell *matCellDef="let row">
             <a class="action-link edit" [routerLink]="['edit', row.idTable]"><mat-icon>edit</mat-icon>Editar</a>
-            <a class="action-link delete" (click)="delete(row.idTable)"><mat-icon>delete</mat-icon>Eliminar</a>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr class="mat-row" *matNoDataRow><td class="mat-cell" colspan="6">¡Aun no hay información para mostrar!</td></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="6">¡Aun no hay información para mostrar!</td>
+        </tr>
       </table>
     </div>
 
-    <mat-paginator
-      [length]="pageable.length()"
-      [pageIndex]="pageable.pageIndex()"
-      [pageSize]="pageable.pageSize()"
-      [pageSizeOptions]="[5,10,25]"
-      (page)="pageable.onPage($event)"
-    ></mat-paginator>
+    <mat-paginator [length]="pageable.length()" [pageIndex]="pageable.pageIndex()" [pageSize]="pageable.pageSize()"
+      [pageSizeOptions]="[5,10,25]" (page)="pageable.onPage($event)"></mat-paginator>
   </div>
+  }
 </div>

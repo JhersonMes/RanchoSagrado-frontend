@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, signal, untracked, viewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal, untracked, viewChild, computed } from '@angular/core';
 import { Order } from '../../model/order';
 import { OrderService } from '../../services/order.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
+import { AuthService } from '../../services/auth.service';
 
 // Refresco periodico para que los cambios de estado hechos por otro rol
 // (mesero crea, cocina prepara, cajero cobra) se reflejen sin recargar la pagina.
@@ -33,6 +34,9 @@ export class OrderComponent {
   private readonly service = inject(OrderService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
+
+  protected readonly isMesero = computed(() => this.authService.roleName().toLowerCase().includes('mesero'));
 
   protected $dataSource = signal(new MatTableDataSource<Order>());
   protected $sort = viewChild(MatSort);
@@ -56,7 +60,11 @@ export class OrderComponent {
 
     effect(() => {
       const ds = this.$dataSource();
-      ds.data = this.pageable.data();
+      let data = this.pageable.data();
+      if (this.isMesero()) {
+        data = data.filter((o) => o.status !== 'PAGADO');
+      }
+      ds.data = data;
       ds.sort = this.$sort();
     });
 

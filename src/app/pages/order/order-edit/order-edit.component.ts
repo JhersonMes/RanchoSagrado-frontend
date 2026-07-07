@@ -19,8 +19,10 @@ import { OrderDetail } from '../../../model/orderdetail';
 import { Product } from '../../../model/product';
 import { OrderDetailService } from '../../../services/orderdetail.service';
 import { catchError, of, switchMap, tap } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 interface SelectedProduct {
+  idOrderDetail?: number;
   product: Product;
   quantity: number;
 }
@@ -29,9 +31,7 @@ const IGV_RATE = 0.18;
 
 export const ORDER_STATUSES = [
   'PENDIENTE',
-  'EN_PROCESO',
   'LISTO',
-  'ENTREGADO',
   'PAGADO',
   'CANCELADO',
 ] as const;
@@ -62,6 +62,7 @@ export class OrderEditComponent {
   protected readonly employeeService = inject(EmployeeService);
   protected readonly tableService = inject(RestaurantTableService);
   protected readonly productService = inject(ProductService);
+  private readonly authService = inject(AuthService);
 
   protected $form = signal(
     new FormGroup({
@@ -111,17 +112,47 @@ export class OrderEditComponent {
 
   protected readonly totalCalc = computed(() => this.subTotalCalc() + this.igvCalc());
 
+  protected readonly availableTables = computed(() => {
+    const allTables = this.tableService.$listChange();
+    const activeOrders = this.service.$listChange().filter(o => o.status !== 'PAGADO' && o.status !== 'CANCELADO');
+    const currentOrderId = Number(this.$id());
+
+    return allTables.filter(t => {
+      const isOccupied = activeOrders.some(o => o.restaurantTable?.idTable === t.idTable && o.idOrder !== currentOrderId);
+      return !isOccupied;
+    });
+  });
+
   constructor() {
-    const preselected: Product | undefined =
-      this.router.getCurrentNavigation()?.extras?.state?.['preselectedProduct'];
+    const nav = this.router.getCurrentNavigation();
+    const preselected: Product | undefined = nav?.extras?.state?.['preselectedProduct'];
+    const preselectedTable: any = nav?.extras?.state?.['preselectedTable'];
 
     this.clientService.findAll().subscribe((data) => this.clientService.setListChange(data));
     this.employeeService.findAll().subscribe((data) => this.employeeService.setListChange(data));
     this.tableService.findAll().subscribe((data) => this.tableService.setListChange(data));
     this.productService.findAll().subscribe((data) => this.productService.setListChange(data));
+    this.service.findAll().subscribe((data) => this.service.setListChange(data));
+    
+    if (this.authService.roleName().toLowerCase().includes('mesero')) {
+      this.$form().controls.status.disable();
+    }
+
     effect(() => {
       const id = this.$id();
-      if (id) this.service.findById(id).subscribe((data) => this.$form().patchValue(data));
+      if (id) {
+        this.service.findById(id).subscribe((data) => this.$form().patchValue(data));
+        this.orderDetailService.findAll().subscribe(details => {
+           const existing = details.filter(d => d.order.idOrder === Number(id));
+           if (existing.length > 0) {
+             this.selectedProducts.set(existing.map(d => ({
+               product: d.product,
+               quantity: d.quantity,
+               idOrderDetail: d.idOrderDetail
+             })));
+           }
+        });
+      }
     });
 
     if (!this.$isEdit()) {
@@ -140,6 +171,10 @@ export class OrderEditComponent {
         total: Math.round(Number(preselected.price) * 1.18 * 100) / 100,
         detail: '1x ' + preselected.name,
       });
+    }
+
+    if (preselectedTable && !this.$isEdit()) {
+      this.$form().patchValue({ restaurantTable: preselectedTable });
     }
   }
 
@@ -246,8 +281,9 @@ export class OrderEditComponent {
         // Al crear, registra también los detalles (producto, cantidad, precio) vinculados al pedido
         switchMap((created: any) => {
           const idOrder = isEdit ? Number(id) : created?.idOrder;
-          if (!isEdit && idOrder && this.selectedProducts().length) {
+          if (idOrder && this.selectedProducts().length) {
             const details: OrderDetail[] = this.selectedProducts().map((sp) => ({
+              idOrderDetail: sp.idOrderDetail,
               quantity: sp.quantity,
               unitPrice: Number(sp.product.price ?? 0),
               notes: '',

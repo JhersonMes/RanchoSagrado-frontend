@@ -1,2 +1,70 @@
 table { width: 100%; }
 .mat-mdc-form-field { font-size: 14px; width: 100%; }
+
+/* ── Estado badges ── */
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.estado-listo {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1.5px solid #fcd34d;
+}
+
+.estado-pagado {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
+}
+
+.estado-proceso {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1.5px solid #93c5fd;
+}
+
+.estado-pendiente {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1.5px solid #e2e8f0;
+}
+
+/* Punto pulsante para estado LISTO */
+.estado-pulso {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d97706;
+  animation: pulso 1.5s ease-in-out infinite;
+}
+
+@keyframes pulso {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* Botón Cobrar en actions */
+.action-link.charge {
+  color: #b91c1c;
+  font-weight: 700;
+  background: #fef2f2;
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #fca5a5;
+  transition: background 0.15s, border-color 0.15s;
+}
+.action-link.charge:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+}

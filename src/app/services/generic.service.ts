@@ -33,4 +33,9 @@ export abstract class GenericService<T> {
   delete(id: number) {
     return this.http.delete(`${this.url}/${id}`);
   }
+
+  /** Actualización parcial (PATCH). Útil para cambiar sólo el estado sin enviar toda la entidad. */
+  patch(id: number, body: Partial<T>) {
+    return this.http.patch<T>(`${this.url}/${id}`, body);
+  }
 }

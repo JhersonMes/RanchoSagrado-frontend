@@ -83,6 +83,21 @@ export class CajeroDashboardComponent {
     this.orders().filter((o) => o.status === 'LISTO')
   );
 
+  // Reporte: pagos PAGADO del día de hoy para el widget de cobros
+  readonly mesasCobradas = computed(() => {
+    return this.payments()
+      .filter((p) => p.status === 'PAGADO' && isToday(p.paymentDate))
+      .map((p) => ({
+        idPayment: p.idPayment,
+        mesa: p.order?.restaurantTable?.tableNumber ?? '-',
+        hora: new Date(p.paymentDate).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' }),
+        metodo: p.paymentMethod ?? '-',
+        monto: Number(p.amount ?? 0),
+      }))
+      .sort((a, b) => b.monto - a.monto);
+  });
+
+
   // Gráfico de pastel: Pagos pendientes vs. Atendidos (PAGADO)
   readonly pagosAtendidosCount = computed(
     () => this.payments().filter((p) => p.status === 'PAGADO').length
