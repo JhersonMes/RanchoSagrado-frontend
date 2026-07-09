@@ -37,6 +37,14 @@ export class ServerErrorInterceptor implements HttpInterceptor {
       .pipe(
         catchError((err) => {
           console.error('HTTP Error caught in interceptor:', err);
+
+          // Consultas "best effort" que no deben interrumpir al usuario con un toast
+          // si fallan (ej. buscar el Employee vinculado a la cuenta para preseleccionar
+          // el campo Empleado; puede no existir o el endpoint puede no estar disponible aún).
+          if (req.url.endsWith('/employees/me')) {
+            return EMPTY;
+          }
+
           const errorMsg = err.error?.message || err.error?.detail || err.message || 'Error desconocido';
 
           if (err.status === 400) {

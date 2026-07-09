@@ -1,7 +1,15 @@
 import { Routes } from '@angular/router';
-import { noCajeroGuard } from '../guards/no-cajero.guard';
+import { adminOnlyGuard } from '../guards/admin-only.guard';
 
 export const pagesRoutes: Routes = [
+  // Acceso no autorizado (destino de adminOnlyGuard para roles distintos de Administrador)
+  {
+    path: 'unauthorized',
+    loadComponent: () =>
+      import('./unauthorized/unauthorized.component').then((m) => m.UnauthorizedComponent),
+    data: { title: 'Acceso no autorizado' },
+  },
+
   // Advertencia previa a Administrar Negocio
   {
     path: 'business-warning',
@@ -10,7 +18,7 @@ export const pagesRoutes: Routes = [
         (m) => m.BusinessWarningComponent,
       ),
     data: { title: 'Administrar Negocio' },
-    canActivate: [noCajeroGuard],
+    canActivate: [adminOnlyGuard],
   },
 
   // Administrar Negocio (dashboard)
@@ -18,7 +26,7 @@ export const pagesRoutes: Routes = [
     path: 'business',
     loadComponent: () => import('./business/business.component').then((m) => m.BusinessComponent),
     data: { title: 'Administrar Negocio' },
-    canActivate: [noCajeroGuard],
+    canActivate: [adminOnlyGuard],
   },
 
   // Clientes
@@ -26,6 +34,7 @@ export const pagesRoutes: Routes = [
     path: 'client',
     loadComponent: () => import('./client/client.component').then((m) => m.ClientComponent),
     data: { title: 'Clientes' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -45,6 +54,7 @@ export const pagesRoutes: Routes = [
     path: 'supplier',
     loadComponent: () => import('./supplier/supplier.component').then((m) => m.SupplierComponent),
     data: { title: 'Proveedores' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -68,6 +78,7 @@ export const pagesRoutes: Routes = [
     path: 'role',
     loadComponent: () => import('./role/role.component').then((m) => m.RoleComponent),
     data: { title: 'Roles' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -87,6 +98,7 @@ export const pagesRoutes: Routes = [
     path: 'user',
     loadComponent: () => import('./user/user.component').then((m) => m.UserComponent),
     data: { title: 'Usuarios' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -106,6 +118,7 @@ export const pagesRoutes: Routes = [
     path: 'employee',
     loadComponent: () => import('./employee/employee.component').then((m) => m.EmployeeComponent),
     data: { title: 'Empleados' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -129,6 +142,7 @@ export const pagesRoutes: Routes = [
     path: 'shift',
     loadComponent: () => import('./shift/shift.component').then((m) => m.ShiftComponent),
     data: { title: 'Turnos' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -151,6 +165,7 @@ export const pagesRoutes: Routes = [
         (m) => m.IngredientCategoryComponent,
       ),
     data: { title: 'Categorías de Ingrediente' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -175,6 +190,7 @@ export const pagesRoutes: Routes = [
     loadComponent: () =>
       import('./ingredient/ingredient.component').then((m) => m.IngredientComponent),
     data: { title: 'Ingredientes' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -199,6 +215,7 @@ export const pagesRoutes: Routes = [
     loadComponent: () =>
       import('./inventory/inventory.component').then((m) => m.InventoryComponent),
     data: { title: 'Inventario' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -222,6 +239,7 @@ export const pagesRoutes: Routes = [
     path: 'menu',
     loadComponent: () => import('./menu/menu.component').then((m) => m.MenuComponent),
     data: { title: 'Cartas' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -244,6 +262,7 @@ export const pagesRoutes: Routes = [
         (m) => m.ProductCategoryComponent,
       ),
     data: { title: 'Categorías de Producto' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -267,6 +286,7 @@ export const pagesRoutes: Routes = [
     path: 'product',
     loadComponent: () => import('./product/product.component').then((m) => m.ProductComponent),
     data: { title: 'Productos' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -291,6 +311,7 @@ export const pagesRoutes: Routes = [
     loadComponent: () =>
       import('./promotion/promotion.component').then((m) => m.PromotionComponent),
     data: { title: 'Promociones' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -364,6 +385,7 @@ export const pagesRoutes: Routes = [
     path: 'contract',
     loadComponent: () => import('./contract/contract.component').then((m) => m.ContractComponent),
     data: { title: 'Contratos' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',
@@ -430,6 +452,7 @@ export const pagesRoutes: Routes = [
     loadComponent: () =>
       import('./payment-receipt/payment-receipt.component').then((m) => m.PaymentReceiptComponent),
     data: { title: 'Comprobantes de Pago' },
+    canActivate: [adminOnlyGuard],
     children: [
       {
         path: 'new',

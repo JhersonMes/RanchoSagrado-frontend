@@ -31,7 +31,9 @@ const IGV_RATE = 0.18;
 
 export const ORDER_STATUSES = [
   'PENDIENTE',
+  'EN_PROCESO',
   'LISTO',
+  'ENTREGADO',
   'PAGADO',
   'CANCELADO',
 ] as const;
@@ -136,6 +138,23 @@ export class OrderEditComponent {
     
     if (this.authService.roleName().toLowerCase().includes('mesero')) {
       this.$form().controls.status.disable();
+    }
+
+    // El campo Empleado solo lo puede elegir libremente el Administrador. Para el resto
+    // de roles, si la cuenta autenticada tiene un Employee vinculado (ej. el Mesero),
+    // se preselecciona y se bloquea. Si no tiene uno vinculado (ej. el Cliente, que no
+    // es un empleado), el campo se deja como estaba para no impedir crear el pedido.
+    if (!this.authService.roleName().toLowerCase().includes('admin')) {
+      this.employeeService.findMine().subscribe({
+        next: (employee) => {
+          if (!employee) return;
+          this.$form().controls.employee.disable();
+          if (!this.$isEdit()) {
+            this.$form().patchValue({ employee });
+          }
+        },
+        error: () => {},
+      });
     }
 
     effect(() => {

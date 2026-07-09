@@ -13,10 +13,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-contract',
   imports: [
+    BackToHomeComponent,
     MatTableModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatButtonModule,
     MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule, DatePipe, DecimalPipe,

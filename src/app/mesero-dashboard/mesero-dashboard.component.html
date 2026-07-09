@@ -1,0 +1,139 @@
+<div class="min-h-screen flex bg-slate-50">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+  <app-header title="Dashboard de Mesero" searchPlaceholder="Buscar pedido..."></app-header>
+
+  <main class="flex-1 px-8 py-6">
+
+    <h1 class="text-2xl font-extrabold text-slate-800">Bienvenido de nuevo, {{ userName() }}</h1>
+    <p class="text-slate-500 mb-6">Resumen de Atención — Hoy</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500">Pedidos Atendidos Hoy</p>
+        <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ pedidosAtendidosHoy() }}</p>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500">Mesas Activas</p>
+        <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ mesasActivas() }}</p>
+        <span class="inline-block mt-2 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold px-2 py-0.5">{{ mesasReservadas() }} reservadas</span>
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="text-sm text-slate-500">Tiempo Promedio de Espera</p>
+        <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ tiempoPromedioEspera() }} min</p>
+        <span class="inline-block mt-2 rounded-full bg-slate-50 text-slate-500 text-xs font-semibold px-2 py-0.5">Pedidos aún no entregados</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- Pedidos listos para entregar -->
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <p class="font-semibold text-slate-800">Pedidos listos para entregar</p>
+            @if (pedidosListosParaEntregar().length) {
+              <span class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-red-700 text-white text-xs font-bold">{{ pedidosListosParaEntregar().length }}</span>
+            }
+          </div>
+          <a routerLink="/pages/order" class="text-sm font-semibold text-red-700 hover:underline">Ver todos</a>
+        </div>
+        @if (pedidosListosParaEntregar().length) {
+          <ul class="space-y-2 text-sm">
+            @for (orden of pedidosListosParaEntregar(); track orden.idOrder) {
+              <li class="flex items-center justify-between rounded-xl border border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-3 transition-shadow hover:shadow-md">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-amber-400 text-white font-bold text-xs">
+                    {{ orden.restaurantTable?.tableNumber ?? '?' }}
+                  </span>
+                  <div>
+                    <p class="font-semibold text-slate-800 leading-tight">Mesa {{ orden.restaurantTable?.tableNumber ?? '-' }}</p>
+                    <p class="text-xs text-slate-400">{{ orden.client?.name ?? 'Sin cliente' }}</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  (click)="askDeliverConfirmation(orden)"
+                  [disabled]="entregandoIds.has(orden.idOrder!)"
+                  class="inline-flex items-center gap-1 rounded-lg bg-red-700 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-800 active:scale-95 transition-all shadow-sm disabled:opacity-50"
+                >
+                  Entregar
+                </button>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="flex flex-col items-center justify-center py-8 text-slate-400">
+            <svg class="h-10 w-10 mb-2 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-sm font-medium">Sin pedidos pendientes de entrega</p>
+            <p class="text-xs mt-1">Cuando el chef marque un pedido como LISTO, aparecerá aquí.</p>
+          </div>
+        }
+      </div>
+
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="font-semibold text-slate-800 mb-4">Distribución de Mesas</p>
+        <div class="flex items-center gap-6">
+          <div class="h-32 w-32 rounded-full shrink-0" [style.background]="mesasChartGradient()"></div>
+          <div class="flex flex-col gap-2 text-sm">
+            <span class="flex items-center gap-2">
+              <span class="inline-block h-2.5 w-2.5 rounded-full" style="background:#22c55e"></span>
+              Disponibles {{ distribucionMesas().disponible }}%
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="inline-block h-2.5 w-2.5 rounded-full bg-red-700"></span>
+              Ocupadas {{ distribucionMesas().ocupada }}%
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="inline-block h-2.5 w-2.5 rounded-full bg-amber-300"></span>
+              Reservadas {{ distribucionMesas().reservada }}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 mt-4">
+      <div class="rounded-2xl bg-white border border-slate-100 card-shadow p-5">
+        <p class="font-semibold text-slate-800 mb-4">Pedidos por día (últimos 7 días)</p>
+        <div class="flex items-end justify-between gap-3 h-40">
+          @for (dia of pedidosPorDia(); track dia.label) {
+            <div class="flex flex-col items-center gap-1 flex-1">
+              <div class="w-full rounded-t-md bg-red-700" [style.height.%]="(dia.total / pedidosPorDiaMax()) * 100"></div>
+              <span class="text-xs text-slate-500">{{ dia.label }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+  </main>
+  </div>
+
+</div>
+
+@if (orderToDeliver(); as order) {
+  <div class="logout-modal-overlay" (click)="cancelDeliver()">
+    <div class="logout-modal-panel" (click)="$event.stopPropagation()">
+      <div class="logout-modal-icon">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.83H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+        </svg>
+      </div>
+      <h3 class="logout-modal-title">Confirmar entrega</h3>
+      <p class="logout-modal-message">
+        ¿Confirmas que entregaste el pedido #{{ order.idOrder }} (Mesa {{ order.restaurantTable?.tableNumber ?? '-' }})?
+        Una vez entregado ya no podrás editarlo.
+      </p>
+      <div class="logout-modal-actions">
+        <button type="button" class="logout-modal-cancel" (click)="cancelDeliver()">Cancelar</button>
+        <button type="button" class="logout-modal-confirm" (click)="confirmDeliver()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+}

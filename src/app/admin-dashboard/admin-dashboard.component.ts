@@ -11,7 +11,7 @@ import { PaymentService } from '../services/payment.service';
 import { EmployeeService } from '../services/employee.service';
 import { ReservationService } from '../services/reservation.service';
 
-const ACTIVE_ORDER_STATUSES = ['PENDIENTE', 'EN_PROCESO', 'LISTO'];
+const ACTIVE_ORDER_STATUSES = ['PENDIENTE', 'EN_PROCESO', 'LISTO', 'ENTREGADO'];
 
 function isSameDay(dateStr: string, reference: Date): boolean {
   if (!dateStr) return false;

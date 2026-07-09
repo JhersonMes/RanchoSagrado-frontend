@@ -9,8 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
 import { RoleService } from '../../../services/rol.service';
+import { UserService } from '../../../services/user.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Employee } from '../../../model/employee';
+import { User } from '../../../model/user';
 import { switchMap, tap } from 'rxjs';
 import { dniValidator, nameValidator, phoneValidator } from '../../../shared/app-validators';
 import { DniInputDirective, NameInputDirective, PhoneInputDirective } from '../../../shared/phone-dni-input.directive';
@@ -42,6 +44,7 @@ export class EmployeeEditComponent {
   private readonly router = inject(Router);
   private readonly service = inject(EmployeeService);
   private readonly roleService = inject(RoleService);
+  private readonly userService = inject(UserService);
 
   /** Estados disponibles para el campo Status. */
   protected readonly statuses = EMPLOYEE_STATUSES;
@@ -50,6 +53,26 @@ export class EmployeeEditComponent {
   protected $roles = toSignal(this.roleService.findAll(), { initialValue: [] });
   protected $jobRoles = computed(() =>
     this.$roles().filter(r => r.name?.toUpperCase() !== 'ADMIN')
+  );
+
+  /** Todas las cuentas del sistema y todos los empleados, para armar la lista de cuentas disponibles. */
+  protected $allUsers = toSignal(this.userService.findAll(), { initialValue: [] as User[] });
+  protected $allEmployees = toSignal(this.service.findAll(), { initialValue: [] as Employee[] });
+
+  /** Cuentas ya vinculadas a OTRO empleado (no se pueden reasignar; evita el error de la BD por duplicado). */
+  protected $takenUserIds = computed(() => {
+    const currentId = Number(this.$id());
+    return new Set(
+      this.$allEmployees()
+        .filter((e) => e.idEmployee !== currentId)
+        .map((e) => e.user?.idUser)
+        .filter((id): id is number => !!id),
+    );
+  });
+
+  /** Cuentas seleccionables: todas menos las ya tomadas por otro empleado. */
+  protected $availableUsers = computed(() =>
+    this.$allUsers().filter((u) => !this.$takenUserIds().has(u.idUser!)),
   );
 
   protected $form = signal(new FormGroup({
@@ -61,6 +84,7 @@ export class EmployeeEditComponent {
     phone: new FormControl<string>('', [Validators.required, phoneValidator]),
     status: new FormControl<string>('ACTIVO', [Validators.required]),
     dni: new FormControl<string>('', [Validators.required, dniValidator]),
+    user: new FormControl<User | null>(null),
   }));
 
   private readonly $params = toSignal(this.route.params, { initialValue: {} });
@@ -72,6 +96,10 @@ export class EmployeeEditComponent {
       const id = this.$id();
       if (id) this.service.findById(id).subscribe(data => this.$form().patchValue(data));
     });
+  }
+
+  compareFnUser(a: User | null, b: User | null): boolean {
+    return a && b ? a.idUser === b.idUser : a === b;
   }
 
   operate() {

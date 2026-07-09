@@ -13,10 +13,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-user',
   imports: [
+    BackToHomeComponent,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
@@ -46,7 +48,7 @@ export class UserComponent {
   );
 
   protected displayedColumns: string[] = [
-    'idUser', 'username', 'email', 'employee', 'role', 'enabled', 'actions'
+    'idUser', 'username', 'email', 'role', 'enabled', 'actions'
   ];
 
   constructor() {

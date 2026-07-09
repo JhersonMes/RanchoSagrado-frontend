@@ -80,7 +80,7 @@ export class CajeroDashboardComponent {
   });
 
   readonly ordenesListasParaCobro = computed(() =>
-    this.orders().filter((o) => o.status === 'LISTO')
+    this.orders().filter((o) => o.status === 'ENTREGADO')
   );
 
   // Reporte: pagos PAGADO del día de hoy para el widget de cobros

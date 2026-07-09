@@ -16,10 +16,12 @@ import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../model/order';
 import { Router } from '@angular/router';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-restaurant-table',
   imports: [
+    BackToHomeComponent,
     MatTableModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatButtonModule,
     MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule

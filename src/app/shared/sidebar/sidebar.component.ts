@@ -70,6 +70,7 @@ export class SidebarComponent {
       { label: 'Pedidos', link: '/pages/order', icon: 'Pedidos' },
     ],
     mesero: [
+      { label: 'Dashboard', link: '/mesero/dashboard', icon: 'Dashboard' },
       { label: 'Pedidos', link: '/pages/order', icon: 'Pedidos' },
       { label: 'Mesas', link: '/pages/restaurant-table', icon: 'Mesas' },
       { label: 'Reservaciones', link: '/pages/reservation', icon: 'Reservaciones' },

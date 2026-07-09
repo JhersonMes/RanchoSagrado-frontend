@@ -4,7 +4,7 @@
     <div [hidden]="true"><mat-form-field><input matInput formControlName="idPayment"></mat-form-field></div>
 
     <mat-form-field>
-        <mat-label>Pedido (solo pedidos LISTO)</mat-label>
+        <mat-label>Pedido (solo pedidos ENTREGADO)</mat-label>
         <mat-select formControlName="order" [compareWith]="compareFnOrder">
             @for (o of selectableOrders(); track o.idOrder) {
                 <mat-option [value]="o">Pedido #{{o.idOrder}} - S/ {{o.total}} ({{o.status}})</mat-option>

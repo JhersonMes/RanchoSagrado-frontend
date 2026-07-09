@@ -24,7 +24,7 @@ export class AuthService {
     if (role.includes('admin')) return '/admin/dashboard';
     if (role.includes('caj') || role.includes('cash')) return '/cajero/dashboard';
     if (role.includes('chef')) return '/chef/dashboard';
-    if (role.includes('mesero') || role.includes('waiter')) return '/pages/order';
+    if (role.includes('mesero') || role.includes('waiter')) return '/mesero/dashboard';
     if (role.includes('cliente') || role.includes('client')) return '/cliente/dashboard';
     return '/pages/order';
   }

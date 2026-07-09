@@ -12,10 +12,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-employee',
   imports: [
+    BackToHomeComponent,
     MatTableModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatButtonModule,
     MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule,
@@ -35,7 +37,7 @@ export class EmployeeComponent {
     (page, size) => this.service.findAllPageable(page, size),
     () => this.$items(),
   );
-  protected displayedColumns = ['idEmployee', 'name', 'lastName', 'address', 'job', 'phone', 'status', 'dni', 'actions'];
+  protected displayedColumns = ['idEmployee', 'name', 'lastName', 'address', 'job', 'phone', 'status', 'dni', 'user', 'actions'];
 
   constructor() {
     this.service.findAll().subscribe(data => this.service.setListChange(data));// Muestra un mensaje informativo y limpia el estado del mensaje después de notificar al usuario.

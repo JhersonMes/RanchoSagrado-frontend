@@ -12,10 +12,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-role',
   imports: [
+    BackToHomeComponent,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,

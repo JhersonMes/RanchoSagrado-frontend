@@ -1,10 +1,7 @@
 <router-outlet></router-outlet>
 
 <div class="page">
-  <a class="page-back" routerLink="/pages/business">
-    <mat-icon>arrow_back</mat-icon>
-    Volver a la Gestión de Negocio
-  </a>
+  <app-back-to-home></app-back-to-home>
 
   <div class="page-head">
     <div>
@@ -57,6 +54,8 @@
               <span class="estado-pulso"></span>
               {{ row.status }}
             </span>
+            } @else if (row.status === 'ENTREGADO') {
+            <span class="estado-badge estado-entregado">{{ row.status }}</span>
             } @else if (row.status === 'PAGADO') {
             <span class="estado-badge estado-pagado">{{ row.status }}</span>
             } @else if (row.status === 'EN_PROCESO') {
@@ -79,13 +78,24 @@
               <mat-icon>check_circle</mat-icon>Marcar Listo
             </a>
             }
-            @if (row.status === 'LISTO') {
+            @if (isMesero() && row.status === 'LISTO') {
+            <a class="action-link deliver" (click)="askDeliverConfirmation(row)">
+              <mat-icon>local_shipping</mat-icon>Entregar
+            </a>
+            }
+            @if (!isMesero() && row.status === 'ENTREGADO') {
             <a class="action-link charge" [routerLink]="['/pages/payment/new']"
               [queryParams]="{ orderId: row.idOrder }">
               <mat-icon>payments</mat-icon>Cobrar
             </a>
             }
+            @if (isMesero()) {
+            <span class="action-link edit disabled" title="El Mesero no puede editar pedidos desde esta lista">
+              <mat-icon>edit</mat-icon>Editar
+            </span>
+            } @else {
             <a class="action-link edit" [routerLink]="['edit', row.idOrder]"><mat-icon>edit</mat-icon>Editar</a>
+            }
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -100,3 +110,22 @@
       [pageSizeOptions]="[5,10,25]" (page)="pageable.onPage($event)"></mat-paginator>
   </div>
 </div>
+
+@if (orderToDeliver(); as order) {
+  <div class="logout-modal-overlay" (click)="cancelDeliver()">
+    <div class="logout-modal-panel" (click)="$event.stopPropagation()">
+      <div class="logout-modal-icon">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+      <h3 class="logout-modal-title">Confirmar entrega</h3>
+      <p class="logout-modal-message">
+        ¿Confirmas que entregaste el pedido #{{ order.idOrder }} (Mesa {{ order.restaurantTable?.tableNumber ?? '-' }})?
+        Una vez entregado ya no podrás editarlo.
+      </p>
+      <div class="logout-modal-actions">
+        <button type="button" class="logout-modal-cancel" (click)="cancelDeliver()">Cancelar</button>
+        <button type="button" class="logout-modal-confirm" (click)="confirmDeliver()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+}

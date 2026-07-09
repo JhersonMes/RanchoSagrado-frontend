@@ -44,10 +44,10 @@ export class PaymentEditComponent {
   protected readonly paymentMethods = ['EFECTIVO', 'TARJETA', 'YAPE', 'PLIN'];
   protected readonly paymentStatuses = ['PENDIENTE', 'PAGADO', 'REEMBOLSADO'];
 
-  // Al crear un pago solo se listan pedidos LISTO (regla: el chef debe marcar listo antes de cobrar)
+  // Al crear un pago solo se listan pedidos ENTREGADO (el mesero debe entregar antes de cobrar)
   protected readonly selectableOrders = computed(() => {
     const orders = this.orderService.$listChange();
-    return this.$isEdit() ? orders : orders.filter((o) => o.status === 'LISTO');
+    return this.$isEdit() ? orders : orders.filter((o) => o.status === 'ENTREGADO');
   });
 
   protected readonly dateLocked = signal(true);

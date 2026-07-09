@@ -10,10 +10,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 @Component({
   selector: 'app-payment-receipt',
   imports: [
+    BackToHomeComponent,
     MatTableModule, MatPaginatorModule, MatSortModule,
     MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule, DatePipe, DecimalPipe,
   ],

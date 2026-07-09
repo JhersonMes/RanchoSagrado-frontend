@@ -88,6 +88,19 @@
         }
     </mat-form-field>
 
+    <!-- Cuenta de sistema vinculada (asociación manual: el Administrador elige qué cuenta
+         corresponde a este empleado; no es obligatorio, un empleado puede no tener cuenta). -->
+    <mat-form-field>
+        <mat-label>Cuenta de Usuario</mat-label>
+        <mat-select formControlName="user" [compareWith]="compareFnUser">
+            <mat-option [value]="null">Sin cuenta asociada</mat-option>
+            @for (u of $availableUsers(); track u.idUser) {
+                <mat-option [value]="u">{{ u.username }} ({{ u.role?.name }})</mat-option>
+            }
+        </mat-select>
+        <mat-hint>Solo se listan cuentas que no estén ya vinculadas a otro empleado.</mat-hint>
+    </mat-form-field>
+
     <div class="form-actions">
     <button mat-flat-button type="submit"><span>Guardar</span><mat-icon>done</mat-icon></button>
     <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/employee">

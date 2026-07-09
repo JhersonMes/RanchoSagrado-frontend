@@ -41,6 +41,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'mesero/dashboard',
+    loadComponent: () =>
+      import('./mesero-dashboard/mesero-dashboard.component').then(
+        (m) => m.MeseroDashboardComponent,
+      ),
+  },
+  {
     path: 'pages',
     component: LayoutComponent,
     loadChildren: () => import('./pages/pages.routes').then((m) => m.pagesRoutes),

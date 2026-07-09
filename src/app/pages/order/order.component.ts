@@ -14,6 +14,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 import { PageableSearch } from '../../shared/pageable-search';
 import { AuthService } from '../../services/auth.service';
+import { BackToHomeComponent } from '../../shared/back-to-home/back-to-home.component';
 
 // Refresco periodico para que los cambios de estado hechos por otro rol
 // (mesero crea, cocina prepara, cajero cobra) se reflejen sin recargar la pagina.
@@ -22,6 +23,7 @@ const REFRESH_INTERVAL_MS = 8000;
 @Component({
   selector: 'app-order',
   imports: [
+    BackToHomeComponent,
     MatTableModule, MatFormFieldModule, MatInputModule,
     MatPaginatorModule, MatSortModule, MatButtonModule,
     MatIconModule, RouterLink, RouterOutlet, MatSnackBarModule, DatePipe, DecimalPipe,
@@ -37,6 +39,9 @@ export class OrderComponent {
   private readonly authService = inject(AuthService);
 
   protected readonly isMesero = computed(() => this.authService.roleName().toLowerCase().includes('mesero'));
+
+  /** Pedido pendiente de confirmar entrega (null = modal cerrado). */
+  protected readonly orderToDeliver = signal<Order | null>(null);
 
   protected $dataSource = signal(new MatTableDataSource<Order>());
   protected $sort = viewChild(MatSort);
@@ -101,5 +106,19 @@ export class OrderComponent {
       tap(() => this.service.setMessageChange(`PEDIDO #${row.idOrder} → ${status}`)),
       tap(() => this.pageable.loadServerPage()),
     ).subscribe();
+  }
+
+  askDeliverConfirmation(row: Order): void {
+    this.orderToDeliver.set(row);
+  }
+
+  cancelDeliver(): void {
+    this.orderToDeliver.set(null);
+  }
+
+  confirmDeliver(): void {
+    const order = this.orderToDeliver();
+    this.orderToDeliver.set(null);
+    if (order) this.updateStatus(order, 'ENTREGADO');
   }
 }

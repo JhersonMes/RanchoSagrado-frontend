@@ -46,7 +46,6 @@ export class UserEditComponent {
     email: new FormControl<string>('', [Validators.required, Validators.email]),
     password: new FormControl<string>(''),
     enabled: new FormControl<boolean>(true),
-    employee: new FormControl<any>(null), 
     role: new FormControl<any>(null, [Validators.required])
   }));
 
